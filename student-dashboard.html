@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - CodeTrack</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;}
+        body{background:#f1f5f9;min-height:100vh;}
+
+        /* NAVBAR */
+        .navbar{background:#0f172a;height:60px;padding:0 28px;display:flex;align-items:center;justify-content:space-between;}
+        .navbar h1{font-size:19px;color:#60a5fa;font-weight:700;}
+        .nav-right{display:flex;align-items:center;gap:16px;}
+        .nav-info{display:flex;flex-direction:column;align-items:flex-end;}
+        .nav-info strong{font-size:14px;color:white;}
+        .nav-info span{font-size:12px;color:#94a3b8;}
+        .logout-btn{padding:7px 14px;background:#ef4444;color:white;border:none;border-radius:6px;cursor:pointer;font-size:13px;font-weight:600;}
+        .logout-btn:hover{background:#dc2626;}
+
+        /* LAYOUT */
+        .page{display:flex;gap:0;min-height:calc(100vh - 60px);}
+
+        /* SIDEBAR */
+        .sidebar{width:260px;background:#0f172a;padding:24px 16px;display:flex;flex-direction:column;gap:6px;flex-shrink:0;}
+        .sidebar-profile{text-align:center;padding:20px 10px 24px;border-bottom:1px solid #1e293b;margin-bottom:10px;}
+        .sidebar-avatar{width:80px;height:80px;border-radius:50%;border:3px solid #2563eb;margin-bottom:10px;object-fit:cover;}
+        .sidebar-name{font-size:15px;font-weight:700;color:white;margin-bottom:4px;}
+        .sidebar-reg{font-size:12px;color:#94a3b8;margin-bottom:12px;}
+        .sidebar-badges{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;}
+        .rank-pill{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;}
+        .rank-dept{background:#1e3a5f;color:#60a5fa;}
+        .rank-college{background:#1a2e1a;color:#4ade80;}
+
+        .nav-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:8px;cursor:pointer;color:#94a3b8;font-size:13px;font-weight:600;transition:0.2s;border:none;background:none;width:100%;text-align:left;}
+        .nav-item:hover{background:#1e293b;color:white;}
+        .nav-item.active{background:#2563eb;color:white;}
+        .nav-item .icon{font-size:16px;width:20px;text-align:center;}
+
+        .sidebar-info{margin-top:auto;padding-top:16px;border-top:1px solid #1e293b;}
+        .info-row{display:flex;justify-content:space-between;font-size:12px;padding:4px 6px;}
+        .info-row span:first-child{color:#64748b;}
+        .info-row span:last-child{color:#e2e8f0;font-weight:600;}
+
+        /* MAIN */
+        .main{flex:1;padding:24px;overflow-y:auto;}
+
+        /* TABS */
+        .tab-section{display:none;}
+        .tab-section.active{display:block;}
+
+        /* SUMMARY CARDS */
+        .summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:22px;}
+        .summary-card{background:white;border-radius:12px;padding:18px 16px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,0.06);}
+        .summary-card h3{font-size:12px;color:#64748b;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.4px;}
+        .summary-card .val{font-size:26px;font-weight:800;color:#2563eb;}
+        .summary-card.rank-card .val{color:#f59e0b;}
+        .summary-card.rank-card.college .val{color:#16a34a;}
+
+        /* SECTION TITLE */
+        .section-title{font-size:15px;font-weight:700;color:#0f172a;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+
+        /* PLATFORM CARDS */
+        .platform-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:22px;}
+        .platform-card{background:white;border-radius:12px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,0.06);position:relative;overflow:hidden;}
+        .platform-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+        .platform-card.lc::before{background:#f59e0b;}
+        .platform-card.cc::before{background:#7c3aed;}
+        .platform-card.cf::before{background:#2563eb;}
+        .platform-card.gh::before{background:#0f172a;}
+        .platform-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+        .platform-name{font-size:14px;font-weight:700;color:#0f172a;}
+        .platform-username{font-size:11px;color:#94a3b8;background:#f1f5f9;padding:2px 8px;border-radius:20px;}
+        .platform-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
+        .stat-item{background:#f8fafc;border-radius:8px;padding:8px 10px;}
+        .stat-label{font-size:10px;color:#94a3b8;margin-bottom:2px;}
+        .stat-val{font-size:14px;font-weight:700;color:#0f172a;}
+        .view-btn{width:100%;padding:8px;border:none;border-radius:8px;cursor:pointer;font-size:12px;font-weight:600;transition:0.2s;}
+        .lc .view-btn{background:#fef3c7;color:#92400e;} .lc .view-btn:hover{background:#fde68a;}
+        .cc .view-btn{background:#ede9fe;color:#5b21b6;} .cc .view-btn:hover{background:#ddd6fe;}
+        .cf .view-btn{background:#dbeafe;color:#1e40af;} .cf .view-btn:hover{background:#bfdbfe;}
+        .gh .view-btn{background:#f1f5f9;color:#0f172a;} .gh .view-btn:hover{background:#e2e8f0;}
+        .not-set{font-size:12px;color:#94a3b8;font-style:italic;}
+
+        /* GITHUB CARD — full width */
+        .github-card{background:white;border-radius:12px;padding:22px;box-shadow:0 1px 4px rgba(0,0,0,0.06);margin-bottom:22px;border-top:3px solid #0f172a;}
+        .gh-header{display:flex;align-items:center;gap:16px;margin-bottom:18px;}
+        .gh-avatar{width:60px;height:60px;border-radius:50%;border:2px solid #e2e8f0;}
+        .gh-meta h3{font-size:16px;font-weight:700;color:#0f172a;margin-bottom:2px;}
+        .gh-meta p{font-size:12px;color:#64748b;}
+        .gh-stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px;}
+        .gh-stat{background:#f8fafc;border-radius:10px;padding:12px;text-align:center;}
+        .gh-stat .num{font-size:22px;font-weight:800;color:#0f172a;}
+        .gh-stat .lbl{font-size:11px;color:#94a3b8;margin-top:2px;}
+        .gh-details{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:14px;}
+        .gh-detail-item{display:flex;align-items:center;gap:6px;font-size:12px;color:#64748b;}
+        .lang-badge{display:inline-block;background:#0f172a;color:white;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600;}
+        .gh-btn{padding:9px 20px;background:#0f172a;color:white;border:none;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;}
+        .gh-btn:hover{background:#1e293b;}
+        .gh-loading{color:#94a3b8;font-size:13px;font-style:italic;}
+        .gh-not-set{background:#f8fafc;border-radius:10px;padding:20px;text-align:center;color:#94a3b8;font-size:13px;}
+
+        /* PROFILE LINKS */
+        .links-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:22px;}
+        .link-card{background:white;border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 1px 4px rgba(0,0,0,0.06);cursor:pointer;transition:0.2s;text-decoration:none;}
+        .link-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.1);}
+        .link-icon{font-size:22px;width:36px;text-align:center;}
+        .link-info{flex:1;}
+        .link-name{font-size:13px;font-weight:700;color:#0f172a;}
+        .link-val{font-size:11px;color:#94a3b8;margin-top:2px;}
+        .link-arrow{color:#cbd5e1;font-size:16px;}
+
+        /* SETTINGS */
+        .settings-card{background:white;border-radius:12px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,0.06);}
+        .settings-card h2{font-size:16px;font-weight:700;color:#0f172a;margin-bottom:18px;}
+        .section-label{font-size:11px;font-weight:700;color:#2563eb;text-transform:uppercase;letter-spacing:0.5px;margin:16px 0 10px;padding-bottom:4px;border-bottom:2px solid #dbeafe;}
+        .settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+        .field-group{display:flex;flex-direction:column;gap:4px;}
+        .field-group label{font-size:11px;font-weight:600;color:#374151;}
+        .field-group input{padding:9px 12px;border:1px solid #cbd5e1;border-radius:8px;font-size:13px;outline:none;}
+        .field-group input:focus{border-color:#2563eb;}
+        .save-btn{margin-top:18px;width:100%;padding:12px;background:#2563eb;color:white;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;}
+        .save-btn:hover{background:#1d4ed8;}
+
+        /* FIRST LOGIN MODAL */
+        .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:1000;justify-content:center;align-items:center;}
+        .modal-overlay.active{display:flex;}
+        .modal-box{background:white;border-radius:16px;padding:36px;width:100%;max-width:440px;box-shadow:0 20px 60px rgba(0,0,0,0.3);}
+        .modal-box h2{font-size:20px;color:#0f172a;margin-bottom:4px;}
+        .modal-box .sub{font-size:13px;color:#64748b;margin-bottom:20px;}
+        .modal-box label{display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:4px;}
+        .modal-box input{width:100%;padding:11px 13px;border:1px solid #cbd5e1;border-radius:8px;font-size:13px;margin-bottom:14px;box-sizing:border-box;}
+        .modal-box input:focus{outline:none;border-color:#2563eb;}
+        .modal-save-btn{width:100%;padding:13px;background:#2563eb;color:white;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;}
+        .modal-save-btn:hover{background:#1d4ed8;}
+        .modal-skip{display:block;text-align:center;margin-top:12px;font-size:12px;color:#94a3b8;cursor:pointer;}
+        .modal-skip:hover{color:#64748b;}
+        .modal-msg{text-align:center;font-size:12px;margin-top:8px;}
+
+        /* SPINNER */
+        .spinner{display:inline-block;width:12px;height:12px;border:2px solid rgba(0,0,0,0.1);border-top-color:#2563eb;border-radius:50%;animation:spin 0.7s linear infinite;}
+        @keyframes spin{to{transform:rotate(360deg);}}
+
+        @media(max-width:1100px){
+            .sidebar{width:220px;}
+            .platform-grid{grid-template-columns:1fr 1fr;}
+            .gh-stats-grid{grid-template-columns:repeat(2,1fr);}
+        }
+        @media(max-width:768px){
+            .page{flex-direction:column;}
+            .sidebar{width:100%;}
+            .platform-grid{grid-template-columns:1fr;}
+            .summary-grid{grid-template-columns:repeat(2,1fr);}
+            .settings-grid{grid-template-columns:1fr;}
+        }
+        /* CONTEST CARDS */
+.contest-card {
+    background: white;
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+.contest-card.lc        { border-left: 4px solid #f59e0b; }
+.contest-card.cc        { border-left: 4px solid #7c3aed; }
+.contest-card.cf        { border-left: 4px solid #2563eb; }
+.contest-card.past-card { border-left: 4px solid #94a3b8; opacity:0.85; }
+.contest-platform {
+    font-size: 11px; font-weight: 700;
+    padding: 3px 10px; border-radius: 20px;
+    background: #f1f5f9; color: #475569;
+    white-space: nowrap; min-width: 90px; text-align: center;
+}
+.contest-name { font-size: 13px; font-weight: 600; color: #0f172a; }
+.contest-time {
+    font-size: 11px; color: #64748b;
+    margin-top: 3px; line-height: 1.6;
+}
+.contest-link {
+    padding: 7px 14px; border-radius: 6px;
+    font-size: 12px; font-weight: 600;
+    text-decoration: none; white-space: nowrap;
+    color: white; background: #2563eb; margin-left: auto;
+}
+.contest-link:hover { background: #1d4ed8; }
+.contest-link.grey  { background: #64748b; }
+.contest-link.grey:hover { background: #475569; }
+    </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <h1>⚡ CodeTrack</h1>
+    <div class="nav-right">
+        <div class="nav-info">
+            <strong id="navName">Student</strong>
+            <span id="navReg"></span>
+        </div>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+</div>
+
+<!-- FIRST LOGIN MODAL -->
+<div class="modal-overlay" id="firstLoginModal">
+    <div class="modal-box">
+        <h2>🎉 Welcome to CodeTrack!</h2>
+        <p class="sub">Add your coding platform usernames to start tracking your progress.</p>
+        <label>LeetCode Username</label>
+        <input type="text" id="modalLeetcode" placeholder="e.g. john_doe">
+        <label>CodeChef Username</label>
+        <input type="text" id="modalCodechef" placeholder="e.g. john_doe">
+        <label>Codeforces Username</label>
+        <input type="text" id="modalCodeforces" placeholder="e.g. john_doe">
+        <label>GitHub Username *</label>
+        <input type="text" id="modalGithub" placeholder="e.g. john_doe">
+        <button class="modal-save-btn" onclick="saveFirstLoginProfile()">Save &amp; Continue</button>
+        <span class="modal-skip" onclick="skipFirstLogin()">Skip for now</span>
+        <p class="modal-msg" id="modalMsg"></p>
+    </div>
+</div>
+
+<div class="page">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="sidebar-profile">
+            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+                 class="sidebar-avatar" id="sideAvatar" alt="avatar">
+            <div class="sidebar-name" id="sidebarName">Loading...</div>
+            <div class="sidebar-reg" id="sidebarReg"></div>
+            <div class="sidebar-badges">
+                <span class="rank-pill rank-dept" id="sidebarDeptRank">Dept: -</span>
+                <span class="rank-pill rank-college" id="sidebarCollegeRank">College: -</span>
+            </div>
+        </div>
+
+        <button class="nav-item active" onclick="showTab('overview',this)">
+            <span class="icon">🏠</span> Overview
+        </button>
+        <button class="nav-item" onclick="showTab('coding',this)">
+            <span class="icon">💻</span> Coding Platforms
+        </button>
+        <button class="nav-item" onclick="showTab('contests',this)">
+            <span class="icon">🏆</span> Contests
+        </button>
+        <button class="nav-item" onclick="showTab('github',this)">
+            <span class="icon">🐙</span> GitHub
+        </button>
+        <button class="nav-item" onclick="showTab('links',this)">
+            <span class="icon">🔗</span> My Links
+        </button>
+        <button class="nav-item" onclick="showTab('settings',this)">
+            <span class="icon">⚙️</span> Settings
+        </button>
+
+        <div class="sidebar-info">
+            <div class="info-row">
+                <span>Department</span>
+                <span id="sideDept">-</span>
+            </div>
+            <div class="info-row">
+                <span>Year</span>
+                <span id="sideYear">-</span>
+            </div>
+            <div class="info-row">
+                <span>Section</span>
+                <span id="sideSection">-</span>
+            </div>
+            <div class="info-row">
+                <span>Batch</span>
+                <span id="sideBatch">-</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main">
+
+        <!-- ═══ TAB: OVERVIEW ═══ -->
+        <div class="tab-section active" id="tab-overview">
+
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <h3>Total Solved</h3>
+                    <div class="val" id="totalSolved">0</div>
+                </div>
+                <div class="summary-card">
+                    <h3>Total Contests</h3>
+                    <div class="val" id="totalContests">0</div>
+                </div>
+                <div class="summary-card">
+                    <h3>Highest Rating</h3>
+                    <div class="val" id="highestRating">0</div>
+                </div>
+                <div class="summary-card">
+                    <h3>Best Platform</h3>
+                    <div class="val" style="font-size:18px" id="bestPlatform">-</div>
+                </div>
+                <div class="summary-card rank-card">
+                    <h3>🏛 Dept Rank</h3>
+                    <div class="val" id="deptRank">-</div>
+                </div>
+                <div class="summary-card rank-card college">
+                    <h3>🏅 College Rank</h3>
+                    <div class="val" id="collegeRank">-</div>
+                </div>
+            </div>
+
+            <!-- Quick platform overview -->
+            <div class="section-title">💻 Platform Overview</div>
+            <div class="platform-grid">
+
+                <div class="platform-card lc">
+                    <div class="platform-header">
+                        <span class="platform-name">🟡 LeetCode</span>
+                        <span class="platform-username" id="ovLcUser">-</span>
+                    </div>
+                    <div class="platform-stats">
+                        <div class="stat-item"><div class="stat-label">Solved</div><div class="stat-val" id="ovLcSolved">-</div></div>
+                        <div class="stat-item"><div class="stat-label">Rating</div><div class="stat-val" id="ovLcRating">-</div></div>
+                        <div class="stat-item"><div class="stat-label">Contests</div><div class="stat-val" id="ovLcContests">-</div></div>
+                        <div class="stat-item"><div class="stat-label">Global Rank</div><div class="stat-val" id="ovLcRank">-</div></div>
+                    </div>
+                    <button class="view-btn" onclick="openProfile('leetcode')">View Profile →</button>
+                </div>
+
+                <div class="platform-card cc">
+                    <div class="platform-header">
+                        <span class="platform-name">⭐ CodeChef</span>
+                        <span class="platform-username" id="ovCcUser">-</span>
+                    </div>
+                    <div class="platform-stats">
+                        <div class="stat-item"><div class="stat-label">Rating</div><div class="stat-val" id="ovCcRating">-</div></div>
+                        <div class="stat-item"><div class="stat-label">Stars</div><div class="stat-val" id="ovCcStars">-</div></div>
+                        <div class="stat-item"><div class="stat-label">Contests</div><div class="stat-val" id="ovCcContests">-</div></div>
+                        <div class="stat-item"><div class="stat-label">Global Rank</div><div class="stat-val" id="ovCcRank">-</div></div>
+                    </div>
+                    <button class="view-btn" onclick="openProfile('codechef')">View Profile →</button>
+                </div>
+
+                <div class="platform-card cf">
+                    <div class="platform-header">
+                        <span class="platform-name">🔵 Codeforces</span>
+                        <span class="platform-username" id="ovCfUser">-</span>
+                    </div>
+                    <div class="platform-stats">
+                        <div class="stat-item"><div class="stat-label">Rating</div><div class="stat-val" id="ovCfRating">-</div></div>
+                        <div class="stat-item"><div class="stat-label">Max Rating</div><div class="stat-val" id="ovCfMax">-</div></div>
+                        <div class="stat-item"><div class="stat-label">Contests</div><div class="stat-val" id="ovCfContests">-</div></div>
+                        <div class="stat-item"><div class="stat-label">Solved</div><div class="stat-val" id="ovCfSolved">-</div></div>
+                    </div>
+                    <button class="view-btn" onclick="openProfile('codeforces')">View Profile →</button>
+                </div>
+            </div>
+
+            <!-- GitHub quick card -->
+            <div class="section-title">🐙 GitHub Overview</div>
+            <div id="ghQuickCard"></div>
+
+        </div>
+
+        <!-- ═══ TAB: CODING PLATFORMS ═══ -->
+        <div class="tab-section" id="tab-contests">
+            <div class="section-title">🏆 Upcoming Contests</div>
+            <div id="upcomingContests" style="margin-bottom:24px">
+                <div style="color:#94a3b8;font-size:13px">Loading...</div>
+            </div>
+            <div class="section-title">📋 Recent Contests</div>
+            <div id="pastContests">
+                <div style="color:#94a3b8;font-size:13px">Loading...</div>
+            </div>
+        </div>
+        <div class="tab-section" id="tab-coding">
+            <div class="section-title">💻 Coding Platform Stats</div>
+
+            <!-- LEETCODE DETAIL -->
+            <div class="platform-card lc" style="margin-bottom:16px">
+                <div class="platform-header">
+                    <span class="platform-name" style="font-size:16px">🟡 LeetCode</span>
+                    <span class="platform-username" id="lcUser">Not Set</span>
+                </div>
+                <div class="platform-stats" style="grid-template-columns:repeat(4,1fr)">
+                    <div class="stat-item"><div class="stat-label">Easy</div><div class="stat-val" id="lcEasy">-</div></div>
+                    <div class="stat-item"><div class="stat-label">Medium</div><div class="stat-val" id="lcMedium">-</div></div>
+                    <div class="stat-item"><div class="stat-label">Hard</div><div class="stat-val" id="lcHard">-</div></div>
+                    <div class="stat-item"><div class="stat-label">Total</div><div class="stat-val" id="lcSolved">-</div></div>
+                    <div class="stat-item"><div class="stat-label">Contest Rating</div><div class="stat-val" id="lcRating">-</div></div>
+                    <div class="stat-item"><div class="stat-label">Highest Rating</div><div class="stat-val" id="lcHighest">-</div></div>
+                    <div class="stat-item"><div class="stat-label">Global Rank</div><div class="stat-val" id="lcRank">-</div></div>
+                    <div class="stat-item"><div class="stat-label">Contests</div><div class="stat-val" id="lcContest">-</div></div>
+                    <div class="stat-item" style="grid-column:span 4">
+                        <div class="stat-label">🕐 Platform Rating Updated On</div>
+                        <div class="stat-val" id="lcLastUpdated" style="font-size:12px">-</div>
+                    </div>
+                </div>
+                <div style="display:flex;gap:8px;margin-top:4px">
+                    <button class="view-btn lc" onclick="openProfile('leetcode')" style="flex:1">View LeetCode Profile →</button>
+                </div>
+
+            </div>
+
+            <!-- CODECHEF DETAIL -->
+            <div class="platform-card cc" style="margin-bottom:16px">
+                <div class="platform-header">
+                    <span class="platform-name" style="font-size:16px">⭐ CodeChef</span>
+                    <span class="platform-username" id="ccUser">Not Set</span>
+                </div>
+                <div class="platform-stats" style="grid-template-columns:repeat(4,1fr)">
+                    <div class="stat-item"><div class="stat-label">Current Rating</div><div class="stat-val" id="ccRating">-</div></div>
+                    <div class="stat-item"><div class="stat-label">Highest Rating</div><div class="stat-val" id="ccHighest">-</div></div>
+                    <div class="stat-item"><div class="stat-label">Stars</div><div class="stat-val" id="ccStars">-</div></div>
+                    <div class="stat-item"><div class="stat-label">Division</div><div class="stat-val" id="ccDivision">-</div></div>
+                    <div class="stat-item"><div class="stat-label">Global Rank</div><div class="stat-val" id="ccRank">-</div></div>
+                    <div class="stat-item"><div class="stat-label">Country Rank</div><div class="stat-val" id="ccCountry">-</div></div>
+                    <div class="stat-item"><div class="stat-label">Contests</div><div class="stat-val" id="ccContest">-</div></div>
+                    <div class="stat-item"><div class="stat-label">Problems</div><div class="stat-val" id="ccSolved">-</div></div>
+                    <div class="stat-item" style="grid-column:span 4">
+                        <div class="stat-label">🕐 Platform Rating Updated On</div>
+                        <div class="stat-val" id="ccLastUpdated" style="font-size:12px">-</div>
+                    </div>
+                </div>
+                <button class="view-btn cc" onclick="openProfile('codechef')" style="margin-top:4px">View CodeChef Profile →</button>
+            </div>
+
+            <!-- CODEFORCES DETAIL -->
+            <div class="platform-card cf" style="margin-bottom:16px">
+                <div class="platform-header">
+                    <span class="platform-name" style="font-size:16px">🔵 Codeforces</span>
+                    <span class="platform-username" id="cfUser">Not Set</span>
+                </div>
+                <div class="platform-stats" style="grid-template-columns:repeat(4,1fr)">
+                    <div class="stat-item"><div class="stat-label">Current Rating</div><div class="stat-val" id="cfRating">-</div></div>
+                    <div class="stat-item"><div class="stat-label">Max Rating</div><div class="stat-val" id="cfMax">-</div></div>
+                    <div class="stat-item"><div class="stat-label">Current Rank</div><div class="stat-val" id="cfRank">-</div></div>
+                    <div class="stat-item"><div class="stat-label">Max Rank</div><div class="stat-val" id="cfMaxRank">-</div></div>
+                    <div class="stat-item"><div class="stat-label">Problems</div><div class="stat-val" id="cfSolved">-</div></div>
+                    <div class="stat-item"><div class="stat-label">Contests</div><div class="stat-val" id="cfContest">-</div></div>
+                    <div class="stat-item"><div class="stat-label">Level</div><div class="stat-val" id="cfLevel">-</div></div>
+                    <div class="stat-item"><div class="stat-label">Last Active</div><div class="stat-val" id="cfActive">-</div></div>
+                    <div class="stat-item" style="grid-column:span 4">
+                        <div class="stat-label">🕐 Platform Rating Updated On</div>
+                        <div class="stat-val" id="cfLastUpdated" style="font-size:12px">-</div>
+                    </div>
+                </div>
+                <button class="view-btn cf" onclick="openProfile('codeforces')" style="margin-top:4px">View Codeforces Profile →</button>
+            </div>
+        </div>
+
+        <!-- ═══ TAB: GITHUB ═══ -->
+        <div class="tab-section" id="tab-github">
+            <div class="section-title">🐙 GitHub Profile</div>
+            <div id="githubFullCard"></div>
+        </div>
+
+        <!-- ═══ TAB: LINKS ═══ -->
+        <div class="tab-section" id="tab-links">
+            <div class="section-title">🔗 My Profiles & Links</div>
+            <div class="links-grid" id="linksGrid"></div>
+        </div>
+
+        <!-- ═══ TAB: SETTINGS ═══ -->
+        <div class="tab-section" id="tab-settings">
+            <div class="settings-card">
+                <h2>⚙️ Update Profile</h2>
+
+                <div class="section-label">Basic Information</div>
+                <div class="settings-grid">
+                    <div class="field-group"><label>Full Name</label><input type="text" id="updateName"></div>
+                    <div class="field-group"><label>Email</label><input type="email" id="updateEmail"></div>
+                    <div class="field-group"><label>Phone Number</label><input type="text" id="updatePhone"></div>
+                    <div class="field-group"><label>Batch</label><input type="text" id="updateBatch" placeholder="e.g. 2023-2027"></div>
+                </div>
+
+                <div class="section-label">Coding Platforms</div>
+                <div class="settings-grid">
+                    <div class="field-group"><label>LeetCode Username</label><input type="text" id="updateLeetcode"></div>
+                    <div class="field-group"><label>CodeChef Username</label><input type="text" id="updateCodechef"></div>
+                    <div class="field-group"><label>Codeforces Username</label><input type="text" id="updateCodeforces"></div>
+                    <div class="field-group"><label>HackerRank Username</label><input type="text" id="updateHackerrank"></div>
+                    <div class="field-group"><label>GeeksforGeeks Username</label><input type="text" id="updateGFG"></div>
+                </div>
+
+                <div class="section-label">GitHub & Links</div>
+                <div class="settings-grid">
+                    <div class="field-group"><label>GitHub Username *</label><input type="text" id="updateGithub" placeholder="Required"></div>
+                    <div class="field-group"><label>LinkedIn URL</label><input type="text" id="updateLinkedin"></div>
+                    <div class="field-group"><label>Portfolio URL</label><input type="text" id="updatePortfolio"></div>
+                </div>
+
+                <button class="save-btn" onclick="saveSettings()">Save Changes</button>
+                <p id="settingsMsg" style="text-align:center;margin-top:10px;font-size:13px"></p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="student.js"></script>
+</body>
+</html>

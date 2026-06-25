@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Analytics</title>
+    <link rel="stylesheet" href="analytics.css">
+</head>
+<body>
+
+<h1>Student Analytics Dashboard</h1>
+
+<div class="container">
+
+    <div class="top-row">
+
+        <div class="student-profile">
+            <h2>Student Profile</h2>
+
+            <p><strong>Name:</strong> <span id="name"></span></p>
+            <p><strong>Register No:</strong> <span id="reg"></span></p>
+            <p><strong>Department:</strong> <span id="dept"></span></p>
+            <p><strong>Section:</strong> <span id="sec"></span></p>
+        </div>
+
+        <div class="overall-summary">
+            <h2>Overall Summary</h2>
+
+            <p><strong>Total Problems Solved:</strong> <span id="overallSolved"></span></p>
+            <p><strong>Total Contests:</strong> <span id="overallContest"></span></p>
+            <p><strong>Best Platform:</strong> <span id="bestPlatform"></span></p>
+            <p><strong>Highest Rating:</strong> <span id="highestRating"></span></p>
+        </div>
+
+    </div>
+
+    <div class="platform-section">
+
+        <div class="card">
+            <h2>LeetCode</h2>
+            <p>Easy Solved: <span id="lcEasy"></span></p>
+            <p>Medium Solved: <span id="lcMedium"></span></p>
+            <p>Hard Solved: <span id="lcHard"></span></p>
+            <p>Total Solved: <span id="lcSolved"></span></p>
+            <p>Current Rating: <span id="lcCurrent"></span></p>
+            <p>Highest Rating: <span id="lcHighest"></span></p>
+            <p>Global Rank: <span id="lcRank"></span></p>
+            <p>Contests: <span id="lcContest"></span></p>
+            <p>Last Active: <span id="lcActive"></span></p>
+            <button onclick="openProfile('leetcode')">View Profile</button>
+        </div>
+
+        <div class="card">
+            <h2>CodeChef</h2>
+            <p>Total Solved: <span id="ccSolved"></span></p>
+            <p>Current Rating: <span id="ccCurrent"></span></p>
+            <p>Highest Rating: <span id="ccHighest"></span></p>
+            <p>Global Rank: <span id="ccRank"></span></p>
+            <p>Country Rank: <span id="ccCountryRank"></span></p>
+            <p>Contests: <span id="ccContest"></span></p>
+            <p>Last Active: <span id="ccActive"></span></p>
+            <button onclick="openProfile('codechef')">View Profile</button>
+        </div>
+
+        <div class="card">
+            <h2>Codeforces</h2>
+            <p>Total Solved: <span id="cfSolved"></span></p>
+            <p>Current Rating: <span id="cfCurrent"></span></p>
+            <p>Highest Rating: <span id="cfHighest"></span></p>
+            <p>Global Rank: <span id="cfRank"></span></p>
+            <p>Contests: <span id="cfContest"></span></p>
+            <p>Last Active: <span id="cfActive"></span></p>
+            <button onclick="openProfile('codeforces')">View Profile</button>
+        </div>
+
+    </div>
+
+</div>
+
+<script src="analytics.js"></script>
+
+</body>
+</html>

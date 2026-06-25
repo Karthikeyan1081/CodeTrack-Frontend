@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>CodeTrack Login</title>
+
+    <link
+            rel="stylesheet"
+            href="authnew.css"
+    >
+
+</head>
+
+<body>
+
+<div class="main-container">
+
+    <!-- LEFT PANEL -->
+
+    <div class="left-panel">
+
+        <div class="overlay"></div>
+
+        <div class="branding">
+
+            <h1>CodeTrack</h1>
+
+            <p>
+                Smart Coding Analytics
+                & Student Tracking System
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- RIGHT PANEL -->
+
+    <div class="right-panel">
+
+        <!-- TOGGLE -->
+
+        <div class="toggle-container">
+
+            <div
+                    id="toggleSlider"
+                    class="toggle-slider"
+            ></div>
+
+            <button
+                    id="studentToggle"
+                    class="toggle-btn active"
+                    onclick="switchRole('STUDENT')"
+            >
+                Student
+            </button>
+
+            <button
+                    id="advisorToggle"
+                    class="toggle-btn"
+                    onclick="switchRole('ADVISOR')"
+            >
+                Advisor
+            </button>
+
+        </div>
+
+        <!-- LOGIN CARD -->
+
+        <div class="login-card">
+
+            <h2 id="loginTitle">
+                Student Login
+            </h2>
+
+            <p class="subtitle">
+                Login to continue
+            </p>
+
+            <!-- EMAIL -->
+
+            <input
+                    type="email"
+                    id="email"
+                    placeholder="Enter College Email"
+                    autocomplete="off"
+            >
+
+            <!-- PASSWORD -->
+
+            <input
+                    type="password"
+                    id="password"
+                    placeholder="Enter Password"
+            >
+
+            <!-- FORGOT PASSWORD -->
+
+            <div class="forgot-password">
+
+                <a href="#">
+                    Forgot Password?
+                </a>
+
+            </div>
+
+            <!-- LOGIN BUTTON -->
+
+            <button
+                    class="login-btn"
+                    onclick="login()"
+            >
+                Login
+            </button>
+
+            <p id="msg"></p>
+
+            <!-- REGISTER LINK -->
+
+
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="authnew.js"></script>
+
+<script>
+
+    let selectedRole = "STUDENT";
+
+    function switchRole(role){
+
+        selectedRole = role;
+
+        document.getElementById(
+            "studentToggle"
+        ).classList.remove("active");
+
+        document.getElementById(
+            "advisorToggle"
+        ).classList.remove("active");
+
+        const slider =
+            document.getElementById(
+                "toggleSlider"
+            );
+
+        // STUDENT
+
+        if(role === "STUDENT"){
+
+            document.getElementById(
+                "studentToggle"
+            ).classList.add("active");
+
+            document.getElementById(
+                "loginTitle"
+            ).innerText =
+            "Student Login";
+
+            slider.classList.remove("right");
+        }
+
+        // ADVISOR
+
+        else{
+
+            document.getElementById(
+                "advisorToggle"
+            ).classList.add("active");
+
+            document.getElementById(
+                "loginTitle"
+            ).innerText =
+            "Advisor Login";
+
+            slider.classList.add("right");
+        }
+    }
+
+    // STORE ROLE
+
+    const oldLogin = login;
+
+    login = function(){
+
+        localStorage.setItem(
+            "selectedRole",
+            selectedRole
+        );
+
+        oldLogin();
+    }
+
+</script>
+
+</body>
+
+</html>
