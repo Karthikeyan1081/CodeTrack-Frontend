@@ -32,7 +32,7 @@ function switchTab(tab, el) {
     document.getElementById("tab-"+tab).classList.add("active");
     el.classList.add("active");
     if (tab === "analytics") renderDeptAnalytics();
-    if (tab === "contests")  loadContests(); // ← add this
+    if (tab === "contests")  loadContests();
 }
 
 /* ══ TOAST ══ */
@@ -147,6 +147,7 @@ function recalculateRanks() {
     .catch(() => showToast("❌ Rank calculation failed", "#ef4444"))
     .finally(() => { btn.innerHTML = "🏆 Recalculate Ranks"; btn.disabled = false; });
 }
+
 /* ══════════════════════════════════════
    ADVISORS
 ══════════════════════════════════════ */
@@ -215,6 +216,7 @@ function clearAdvisorModal() {
     ["aName","aEmail","aSec","aDesig","aPhone"].forEach(id=>document.getElementById(id).value="");
     document.getElementById("aDept").value="";
     document.getElementById("advisorModalMsg").innerText="";
+    editingAdvisorId = null;
 }
 
 function saveAdvisor() {
@@ -347,6 +349,7 @@ function getDragAfter(container,y){
 /* ══ HELPERS ══ */
 function deptBadge(dept){return{"ECE":"badge-ece","CSE":"badge-cse","MECH":"badge-mech","IT":"badge-it","EEE":"badge-eee"}[dept]||"badge-dept";}
 
+/* ══ SINGLE MERGED OUTSIDE-CLICK HANDLER (fixes duplicate window.onclick bug) ══ */
 window.onclick = function(e) {
     if (e.target === document.getElementById("createStudentModal")) closeCreateStudentModal();
     if (e.target === document.getElementById("advisorModal")) closeAdvisorModal();
@@ -560,7 +563,7 @@ function fetchPast() {
     });
 }
 
-// ADD this new function anywhere in admin.js
+// Updates the "Platform Last Updated" strip on the Students tab
 function updateLastUpdatedStrip(data) {
     // Find the most recent timestamp across all students per platform
     const latest = (arr) => arr.filter(Boolean).sort().pop() || "Not refreshed";
@@ -648,20 +651,44 @@ function createAdvisorAccount() {
     });
 }
 
-// Close modal on outside click
-window.onclick = function(e) {
-    if (e.target === document.getElementById(
-            "createAdvisorModal"))
-        closeCreateAdvisorModal();
-    // ... keep existing onclick logic
-};
-
 // ══════════════════════════════════════
-// CREATE STUDENT ACCOUNT (ADMIN)
+// CREATE / EDIT STUDENT ACCOUNT (ADMIN)
+// Reuses the same "createStudentModal" for both flows:
+//   editingStudentId === null  -> Create mode (POST)
+//   editingStudentId !== null  -> Edit mode   (PUT)
 // ══════════════════════════════════════
 function openCreateStudentModal() {
+    editingStudentId = null;
+    document.querySelector("#createStudentModal h2").innerText = "Create Student Account";
+    document.querySelector("#createStudentModal .modal-sub").innerText = "Student will use these credentials to login";
+    document.getElementById("csPassword").placeholder = "Set password";
+    document.getElementById("csReg").disabled = false;
     document.getElementById("createStudentModal").classList.add("active");
     document.getElementById("createStudentMsg").innerText = "";
+}
+
+function openEditStudent(id) {
+    const s = allStudents.find(s => s.id === id);
+    if (!s) return;
+    editingStudentId = id;
+
+    document.querySelector("#createStudentModal h2").innerText = "Edit Student";
+    document.querySelector("#createStudentModal .modal-sub").innerText = "Update student details";
+
+    document.getElementById("csName").value = s.name || "";
+    document.getElementById("csReg").value = s.registerNumber || "";
+    document.getElementById("csReg").disabled = true; // register number shouldn't change on edit
+    document.getElementById("csEmail").value = s.email || "";
+    document.getElementById("csPassword").value = "";
+    document.getElementById("csPassword").placeholder = "Leave blank to keep current password";
+    document.getElementById("csDept").value = s.department || "";
+    document.getElementById("csYear").value = s.year || "";
+    document.getElementById("csSection").value = s.section || "";
+    document.getElementById("csBatch").value = s.batch || "";
+    document.getElementById("csPhone").value = s.phoneNumber || "";
+
+    document.getElementById("createStudentMsg").innerText = "";
+    document.getElementById("createStudentModal").classList.add("active");
 }
 
 function closeCreateStudentModal() {
@@ -669,6 +696,8 @@ function closeCreateStudentModal() {
     ["csName","csReg","csEmail","csPassword","csYear","csSection","csBatch","csPhone"]
         .forEach(id => { document.getElementById(id).value = ""; });
     document.getElementById("csDept").value = "";
+    document.getElementById("csReg").disabled = false;
+    editingStudentId = null;
 }
 
 function createStudentAccount() {
@@ -678,40 +707,52 @@ function createStudentAccount() {
     const email = document.getElementById("csEmail").value.trim();
     const pass  = document.getElementById("csPassword").value.trim();
     const dept  = document.getElementById("csDept").value;
+    const isEdit = editingStudentId !== null;
 
-    if (!name || !reg || !email || !pass || !dept) {
+    // Password only required when creating a new account
+    if (!name || !reg || !email || (!isEdit && !pass) || !dept) {
         msg.style.color = "red";
         msg.innerText = "Name, Register Number, Email, Password and Department are required";
         return;
     }
 
     msg.style.color = "#64748b";
-    msg.innerText = "Creating account...";
+    msg.innerText = isEdit ? "Saving changes..." : "Creating account...";
 
-    fetch(BASE_URL + "/auth/admin/create-student", {
-        method: "POST",
-        headers: authHeaders(),
-        body: JSON.stringify({
-            name,
-            registerNumber: reg,
-            email,
-            password: pass,
-            department: dept,
-            year:        document.getElementById("csYear").value.trim(),
-            section:     document.getElementById("csSection").value.trim(),
-            batch:       document.getElementById("csBatch").value.trim(),
-            phoneNumber: document.getElementById("csPhone").value.trim()
-        })
-    })
+    const payload = {
+        name,
+        registerNumber: reg,
+        email,
+        department: dept,
+        year:        document.getElementById("csYear").value.trim(),
+        section:     document.getElementById("csSection").value.trim(),
+        batch:       document.getElementById("csBatch").value.trim(),
+        phoneNumber: document.getElementById("csPhone").value.trim()
+    };
+    // Only send password if provided (create always sends it because it's required above)
+    if (pass) payload.password = pass;
+
+    const url    = isEdit ? STUDENTS + "/update/" + editingStudentId : BASE_URL + "/auth/admin/create-student";
+    const method = isEdit ? "PUT" : "POST";
+
+    fetch(url, { method, headers: authHeaders(), body: JSON.stringify(payload) })
     .then(r => r.text().then(text => ({ ok: r.ok, text })))
     .then(({ ok, text }) => {
-        if (!ok) throw new Error(text || "Failed to create account");
+        if (!ok) throw new Error(text || (isEdit ? "Failed to update student" : "Failed to create account"));
         closeCreateStudentModal();
         loadStudents();
-        showToast("✅ Student account created!", "#16a34a");
+        showToast(isEdit ? "✅ Student updated!" : "✅ Student account created!", "#16a34a");
     })
     .catch(err => {
         msg.style.color = "red";
-        msg.innerText = err.message || "Failed to create account";
+        msg.innerText = err.message || (isEdit ? "Failed to update student" : "Failed to create account");
     });
+}
+
+function deleteStudent(id) {
+    if (!confirm("Delete this student? This cannot be undone.")) return;
+    fetch(STUDENTS + "/delete/" + id, { method: "DELETE", headers: authHeaders() })
+    .then(res => { if (!res.ok) throw new Error("Delete failed"); return res; })
+    .then(() => { loadStudents(); showToast("🗑 Student deleted", "#ef4444"); })
+    .catch(() => showToast("❌ Failed to delete student", "#ef4444"));
 }
