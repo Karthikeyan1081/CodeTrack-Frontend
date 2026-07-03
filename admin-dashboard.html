@@ -204,7 +204,7 @@
             <div class="panel-header">
                 <h2>All Students</h2>
                 <div class="panel-actions">
-                    <button class="btn btn-success" onclick="openStudentModal()">+ Add Student</button>
+                    <button class="btn btn-success" onclick="openStudentModal()">+ Create Student</button>
                     <button class="btn btn-purple" onclick="refreshAllStudents()" id="refreshAllBtn">🔄 Refresh All Stats</button>
                     <button class="btn btn-teal" onclick="recalculateRanks()" id="rankBtn">🏆 Recalculate Ranks</button>
                     <button class="btn btn-primary" onclick="openExportModal()">📥 Export Excel</button>
@@ -320,90 +320,62 @@
 </div><!-- end main -->
 
 <!-- STUDENT MODAL -->
-<div class="modal-overlay" id="studentModal">
-    <div class="modal-box">
-        <h2 id="studentModalTitle">Add Student</h2>
-        <p class="modal-sub">Fill in details and platform stats</p>
-
-        <div class="section-title">Basic Information</div>
+<!-- CREATE STUDENT ACCOUNT MODAL -->
+<div class="modal-overlay" id="createStudentModal">
+    <div class="modal-box" style="max-width:520px">
+        <h2>Create Student Account</h2>
+        <p class="modal-sub">Student will use these credentials to login</p>
+        <p class="section-title">LOGIN CREDENTIALS</p>
         <div class="form-grid">
-            <div class="form-group"><label>Full Name *</label><input type="text" id="sName" placeholder="Student name"></div>
-            <div class="form-group"><label>Register Number *</label><input type="text" id="sReg" placeholder="e.g. 711523BEC046"></div>
-            <div class="form-group"><label>Email</label><input type="email" id="sEmail" placeholder="Email"></div>
-            <div class="form-group"><label>Phone</label><input type="text" id="sPhone" placeholder="Phone"></div>
-            <div class="form-group"><label>Department *</label>
-                <select id="sDept">
+            <div class="form-group">
+                <label>Full Name *</label>
+                <input type="text" id="csName" placeholder="Student name">
+            </div>
+            <div class="form-group">
+                <label>Register Number *</label>
+                <input type="text" id="csReg" placeholder="e.g. 711523BEC046">
+            </div>
+            <div class="form-group">
+                <label>Email (Login ID) *</label>
+                <input type="email" id="csEmail" placeholder="student email">
+            </div>
+            <div class="form-group">
+                <label>Password *</label>
+                <input type="password" id="csPassword" placeholder="Set password">
+            </div>
+            <div class="form-group">
+                <label>Department *</label>
+                <select id="csDept">
                     <option value="">Select</option>
-                    <option value="ECE">ECE</option><option value="CSE">CSE</option>
-                    <option value="MECH">MECH</option><option value="IT">IT</option>
-                    <option value="EEE">EEE</option><option value="CIVIL">CIVIL</option>
+                    <option value="ECE">ECE</option>
+                    <option value="CSE">CSE</option>
+                    <option value="MECH">MECH</option>
+                    <option value="IT">IT</option>
+                    <option value="EEE">EEE</option>
+                    <option value="CIVIL">CIVIL</option>
                 </select>
             </div>
-            <div class="form-group"><label>Year</label>
-                <select id="sYear"><option value="">Select</option>
-                    <option value="1">1</option><option value="2">2</option>
-                    <option value="3">3</option><option value="4">4</option>
-                </select>
+            <div class="form-group">
+                <label>Year</label>
+                <input type="text" id="csYear" placeholder="e.g. 3">
             </div>
-            <div class="form-group"><label>Section</label><input type="text" id="sSec" placeholder="e.g. B"></div>
-            <div class="form-group"><label>Batch</label><input type="text" id="sBatch" placeholder="e.g. 2023-2027"></div>
+            <div class="form-group">
+                <label>Section</label>
+                <input type="text" id="csSection" placeholder="e.g. B">
+            </div>
+            <div class="form-group">
+                <label>Batch</label>
+                <input type="text" id="csBatch" placeholder="e.g. 2023-2027">
+            </div>
+            <div class="form-group">
+                <label>Phone</label>
+                <input type="text" id="csPhone" placeholder="Phone number">
+            </div>
         </div>
-
-        <div class="section-title">Platform Usernames</div>
-        <div class="form-grid">
-            <div class="form-group"><label>LeetCode Username</label><input type="text" id="sLeetcode"></div>
-            <div class="form-group"><label>CodeChef Username</label><input type="text" id="sCodechef"></div>
-            <div class="form-group"><label>Codeforces Username</label><input type="text" id="sCodeforces"></div>
-            <div class="form-group"><label>GitHub Username</label><input type="text" id="sGithub"></div>
-            <div class="form-group"><label>HackerRank Username</label><input type="text" id="sHackerrank"></div>
-            <div class="form-group"><label>GeeksforGeeks Username</label><input type="text" id="sGfg"></div>
-        </div>
-
-        <div class="section-title">LeetCode Stats</div>
-        <div class="form-grid">
-            <div class="form-group"><label>Easy Solved</label><input type="number" id="sLcEasy" placeholder="0"></div>
-            <div class="form-group"><label>Medium Solved</label><input type="number" id="sLcMedium" placeholder="0"></div>
-            <div class="form-group"><label>Hard Solved</label><input type="number" id="sLcHard" placeholder="0"></div>
-            <div class="form-group"><label>Total Solved</label><input type="number" id="sLcTotal" placeholder="0"></div>
-            <div class="form-group"><label>Contest Count</label><input type="number" id="sLcContests" placeholder="0"></div>
-            <div class="form-group"><label>Contest Rating</label><input type="number" id="sLcRating" placeholder="0"></div>
-            <div class="form-group"><label>Global Rank</label><input type="text" id="sLcRank" placeholder="e.g. 50000"></div>
-            <div class="form-group"><label>Top %</label><input type="text" id="sLcTop" placeholder="e.g. 15.2%"></div>
-        </div>
-
-        <div class="section-title">CodeChef Stats</div>
-        <div class="form-grid">
-            <div class="form-group"><label>Current Rating</label><input type="number" id="sCcCurrent" placeholder="0"></div>
-            <div class="form-group"><label>Highest Rating</label><input type="number" id="sCcHighest" placeholder="0"></div>
-            <div class="form-group"><label>Division</label><input type="text" id="sCcDiv" placeholder="e.g. Div 2"></div>
-            <div class="form-group"><label>Stars</label><input type="text" id="sCcStars" placeholder="e.g. 3★"></div>
-            <div class="form-group"><label>Global Rank</label><input type="text" id="sCcGRank" placeholder="e.g. 12000"></div>
-            <div class="form-group"><label>Country Rank</label><input type="text" id="sCcCRank" placeholder="e.g. 3000"></div>
-            <div class="form-group"><label>Contests</label><input type="number" id="sCcContests" placeholder="0"></div>
-            <div class="form-group"><label>Problems Solved</label><input type="number" id="sCcSolved" placeholder="0"></div>
-        </div>
-
-        <div class="section-title">Codeforces Stats</div>
-        <div class="form-grid">
-            <div class="form-group"><label>Current Rating</label><input type="number" id="sCfCurrent" placeholder="0"></div>
-            <div class="form-group"><label>Max Rating</label><input type="number" id="sCfMax" placeholder="0"></div>
-            <div class="form-group"><label>Current Rank</label><input type="text" id="sCfCRank" placeholder="e.g. Specialist"></div>
-            <div class="form-group"><label>Max Rank</label><input type="text" id="sCfMRank" placeholder="e.g. Expert"></div>
-            <div class="form-group"><label>Problems Count</label><input type="number" id="sCfProblems" placeholder="0"></div>
-            <div class="form-group"><label>Contests</label><input type="number" id="sCfContests" placeholder="0"></div>
-            <div class="form-group"><label>Level</label><input type="text" id="sCfLevel" placeholder="e.g. Newbie"></div>
-        </div>
-
-        <div class="section-title">Links</div>
-        <div class="form-grid">
-            <div class="form-group"><label>LinkedIn URL</label><input type="text" id="sLinkedin"></div>
-            <div class="form-group"><label>Portfolio URL</label><input type="text" id="sPortfolio"></div>
-        </div>
-
-        <p class="modal-msg" id="studentModalMsg"></p>
+        <p class="modal-msg" id="createStudentMsg"></p>
         <div class="modal-footer">
-            <button class="btn btn-danger" onclick="closeStudentModal()">Cancel</button>
-            <button class="btn btn-primary" id="studentSaveBtn" onclick="saveStudent()">Save Student</button>
+            <button class="btn btn-danger" onclick="closeCreateStudentModal()">Cancel</button>
+            <button class="btn btn-primary" onclick="createStudentAccount()">Create Account</button>
         </div>
     </div>
 </div>
