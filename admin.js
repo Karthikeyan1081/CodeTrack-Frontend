@@ -442,10 +442,11 @@ function getDragAfter(container,y){
 /* ══ HELPERS ══ */
 function deptBadge(dept){return{"ECE":"badge-ece","CSE":"badge-cse","MECH":"badge-mech","IT":"badge-it","EEE":"badge-eee"}[dept]||"badge-dept";}
 
-window.onclick=function(e){
-    if(e.target===document.getElementById("studentModal"))closeStudentModal();
-    if(e.target===document.getElementById("advisorModal"))closeAdvisorModal();
-    if(e.target===document.getElementById("exportModal"))closeExportModal();
+window.onclick = function(e) {
+    if (e.target === document.getElementById("createStudentModal")) closeCreateStudentModal();
+    if (e.target === document.getElementById("advisorModal")) closeAdvisorModal();
+    if (e.target === document.getElementById("exportModal")) closeExportModal();
+    if (e.target === document.getElementById("createAdvisorModal")) closeCreateAdvisorModal();
 };
 
 /* ══════════════════════════════════════
@@ -749,3 +750,63 @@ window.onclick = function(e) {
         closeCreateAdvisorModal();
     // ... keep existing onclick logic
 };
+
+// ══════════════════════════════════════
+// CREATE STUDENT ACCOUNT (ADMIN)
+// ══════════════════════════════════════
+function openCreateStudentModal() {
+    document.getElementById("createStudentModal").classList.add("active");
+    document.getElementById("createStudentMsg").innerText = "";
+}
+
+function closeCreateStudentModal() {
+    document.getElementById("createStudentModal").classList.remove("active");
+    ["csName","csReg","csEmail","csPassword","csYear","csSection","csBatch","csPhone"]
+        .forEach(id => { document.getElementById(id).value = ""; });
+    document.getElementById("csDept").value = "";
+}
+
+function createStudentAccount() {
+    const msg = document.getElementById("createStudentMsg");
+    const name  = document.getElementById("csName").value.trim();
+    const reg   = document.getElementById("csReg").value.trim();
+    const email = document.getElementById("csEmail").value.trim();
+    const pass  = document.getElementById("csPassword").value.trim();
+    const dept  = document.getElementById("csDept").value;
+
+    if (!name || !reg || !email || !pass || !dept) {
+        msg.style.color = "red";
+        msg.innerText = "Name, Register Number, Email, Password and Department are required";
+        return;
+    }
+
+    msg.style.color = "#64748b";
+    msg.innerText = "Creating account...";
+
+    fetch(BASE_URL + "/auth/admin/create-student", {
+        method: "POST",
+        headers: authHeaders(),
+        body: JSON.stringify({
+            name,
+            registerNumber: reg,
+            email,
+            password: pass,
+            department: dept,
+            year:        document.getElementById("csYear").value.trim(),
+            section:     document.getElementById("csSection").value.trim(),
+            batch:       document.getElementById("csBatch").value.trim(),
+            phoneNumber: document.getElementById("csPhone").value.trim()
+        })
+    })
+    .then(r => r.text().then(text => ({ ok: r.ok, text })))
+    .then(({ ok, text }) => {
+        if (!ok) throw new Error(text || "Failed to create account");
+        closeCreateStudentModal();
+        loadStudents();
+        showToast("✅ Student account created!", "#16a34a");
+    })
+    .catch(err => {
+        msg.style.color = "red";
+        msg.innerText = err.message || "Failed to create account";
+    });
+}
