@@ -1,42 +1,11 @@
-:root{
-    --ink:#0b1220;
-    --ink-2:#16213f;
-    --canvas:#eef1f7;
-    --surface:#ffffff;
-    --border:#e2e7f1;
-    --border-strong:#ccd4e5;
-    --muted:#66708a;
-    --text:#141a2c;
-
-    --primary:#2454d6;
-    --primary-dark:#173a9e;
-    --primary-soft:#e7edfc;
-
-    --lc:#c9821c;
-    --lc-soft:#faf1de;
-    --cc:#6b4a35;
-    --cc-soft:#f2e9e3;
-    --cf:#1f6fa8;
-    --cf-soft:#e6f1f9;
-
-    --radius:10px;
-    --radius-lg:18px;
-    --shadow-sm:0 1px 2px rgba(11,18,32,.05);
-    --shadow:0 1px 3px rgba(11,18,32,.06), 0 8px 20px -12px rgba(11,18,32,.12);
-
-    --font-display:'Space Grotesk',ui-sans-serif,system-ui,sans-serif;
-    --font-body:'Inter',ui-sans-serif,system-ui,sans-serif;
-    --font-mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
-}
-
 *{box-sizing:border-box;}
 
 body {
     margin: 0;
     padding: 0 20px 40px;
-    font-family: var(--font-body);
-    background: var(--canvas);
-    color: var(--text);
+    font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;
+    background: #eef1f7;
+    color: #141a2c;
     -webkit-font-smoothing:antialiased;
 }
 
@@ -48,15 +17,15 @@ body {
 
 h1 {
     margin:0;
-    font-family:var(--font-display);
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;
     font-weight:700;
     font-size:22px;
-    color: var(--ink);
+    color: #0b1220;
     display:flex;
     align-items:center;
     gap:10px;
 }
-h1 .icon{width:20px;height:20px;color:var(--primary);}
+h1 .icon{width:20px;height:20px;color:#2454d6;}
 
 .container {
     width: 95%;
@@ -74,11 +43,11 @@ h1 .icon{width:20px;height:20px;color:var(--primary);}
 .student-profile,
 .overall-summary {
     width: 30%;
-    background: var(--surface);
-    border:1px solid var(--border);
+    background: #ffffff;
+    border:1px solid #e2e7f1;
     padding: 22px;
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-sm);
+    border-radius: 18px;
+    box-shadow: 0 1px 2px rgba(11,18,32,.05);
 }
 .overall-summary{
     width:70%;
@@ -89,11 +58,11 @@ h1 .icon{width:20px;height:20px;color:var(--primary);}
 .card h2 {
     margin-top: 0;
     margin-bottom: 18px;
-    font-family:var(--font-display);
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;
     font-size:15.5px;
     font-weight:700;
-    color: var(--ink);
-    border-bottom: 1px solid var(--border);
+    color: #0b1220;
+    border-bottom: 1px solid #e2e7f1;
     padding-bottom: 12px;
     display:flex;
     align-items:center;
@@ -112,13 +81,13 @@ h1 .icon{width:20px;height:20px;color:var(--primary);}
 .student-profile p:last-child{margin-bottom:0;}
 .student-profile strong{
     font-weight:600;
-    color:var(--muted);
+    color:#66708a;
     font-size:12px;
 }
 .student-profile span{
-    font-family:var(--font-mono);
+    font-family:ui-monospace,SFMono-Regular,Consolas,Menlo,monospace;
     font-weight:700;
-    color:var(--primary-dark);
+    color:#173a9e;
     text-align:right;
 }
 
@@ -129,9 +98,9 @@ h1 .icon{width:20px;height:20px;color:var(--primary);}
     gap:14px;
 }
 .summary-stat{
-    background:var(--canvas);
-    border:1px solid var(--border);
-    border-radius:var(--radius);
+    background:#eef1f7;
+    border:1px solid #e2e7f1;
+    border-radius:10px;
     padding:14px 16px;
     display:flex;
     flex-direction:column;
@@ -142,13 +111,13 @@ h1 .icon{width:20px;height:20px;color:var(--primary);}
     font-weight:700;
     text-transform:uppercase;
     letter-spacing:.5px;
-    color:var(--muted);
+    color:#66708a;
 }
 .summary-value{
-    font-family:var(--font-mono);
+    font-family:ui-monospace,SFMono-Regular,Consolas,Menlo,monospace;
     font-size:19px;
     font-weight:700;
-    color:var(--ink);
+    color:#0b1220;
 }
 
 /* PLATFORM CARDS */
@@ -158,23 +127,23 @@ h1 .icon{width:20px;height:20px;color:var(--primary);}
     gap: 20px;
 }
 .card {
-    background: var(--surface);
-    border:1px solid var(--border);
-    border-top:4px solid var(--primary);
+    background: #ffffff;
+    border:1px solid #e2e7f1;
+    border-top:4px solid #2454d6;
     padding: 22px;
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-sm);
+    border-radius: 18px;
+    box-shadow: 0 1px 2px rgba(11,18,32,.05);
     min-height: 260px;
     display:flex;
     flex-direction:column;
 }
-.card.lc{border-top-color:var(--lc);}
-.card.cc{border-top-color:var(--cc);}
-.card.cf{border-top-color:var(--cf);}
+.card.lc{border-top-color:#c9821c;}
+.card.cc{border-top-color:#6b4a35;}
+.card.cf{border-top-color:#1f6fa8;}
 
-.card.lc h2{color:var(--lc);}
-.card.cc h2{color:var(--cc);}
-.card.cf h2{color:var(--cf);}
+.card.lc h2{color:#c9821c;}
+.card.cc h2{color:#6b4a35;}
+.card.cf h2{color:#1f6fa8;}
 
 .card p {
     margin: 0 0 10px;
@@ -184,19 +153,19 @@ h1 .icon{width:20px;height:20px;color:var(--primary);}
     align-items:baseline;
     gap:12px;
     padding-bottom:10px;
-    border-bottom:1px dashed var(--border);
+    border-bottom:1px dashed #e2e7f1;
 }
 .card p:last-of-type{border-bottom:none;margin-bottom:6px;}
 
 .card .label{
-    color:var(--muted);
+    color:#66708a;
     font-weight:500;
 }
 
 span {
     font-weight: 700;
-    color: var(--ink);
-    font-family:var(--font-mono);
+    color: #0b1220;
+    font-family:ui-monospace,SFMono-Regular,Consolas,Menlo,monospace;
     text-align:right;
 }
 
@@ -205,9 +174,9 @@ span {
     padding:10px 16px;
     border:none;
     border-radius:8px;
-    background:var(--primary);
+    background:#2454d6;
     color:white;
-    font-family:var(--font-body);
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;
     font-size:13px;
     font-weight:600;
     cursor:pointer;
@@ -218,17 +187,17 @@ span {
     transition:.15s;
     box-shadow:0 1px 2px rgba(11,18,32,.06);
 }
-.card button:hover{background:var(--primary-dark);}
+.card button:hover{background:#173a9e;}
 .card button:active{transform:translateY(1px);}
 
-.card.lc button{background:var(--lc);}
+.card.lc button{background:#c9821c;}
 .card.lc button:hover{background:#a56a15;}
-.card.cc button{background:var(--cc);}
+.card.cc button{background:#6b4a35;}
 .card.cc button:hover{background:#553a2a;}
-.card.cf button{background:var(--cf);}
+.card.cf button{background:#1f6fa8;}
 .card.cf button:hover{background:#185d8c;}
 
-:focus-visible{outline:2px solid var(--primary);outline-offset:2px;border-radius:4px;}
+:focus-visible{outline:2px solid #2454d6;outline-offset:2px;border-radius:4px;}
 
 @media (max-width: 1100px) {
     .top-row {
