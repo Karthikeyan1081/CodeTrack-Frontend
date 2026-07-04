@@ -4,117 +4,398 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - CodeTrack</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
     <style>
-        *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;}
-        body{background:#f1f5f9;min-height:100vh;}
+        :root{
+            --ink:#0b1220;
+            --ink-2:#16213f;
+            --canvas:#eef1f7;
+            --surface:#ffffff;
+            --border:#e2e7f1;
+            --border-strong:#ccd4e5;
+            --muted:#66708a;
+            --text:#141a2c;
+
+            --primary:#2454d6;
+            --primary-dark:#173a9e;
+            --primary-soft:#e7edfc;
+
+            --success:#0f8a5f;
+            --success-dark:#0b6d4a;
+            --success-soft:#e2f6ee;
+
+            --danger:#d1443a;
+            --danger-dark:#b3372e;
+            --danger-soft:#fbe9e8;
+
+            --warning:#b97a12;
+            --warning-dark:#96620d;
+            --warning-soft:#fdf1de;
+
+            --purple:#6d3fc0;
+            --purple-dark:#5930a3;
+            --purple-soft:#efe8fb;
+
+            --teal:#0c7f83;
+            --teal-dark:#0a686b;
+            --teal-soft:#e1f4f4;
+
+            --lc:#c9821c;
+            --lc-soft:#faf1de;
+            --cc:#6b4a35;
+            --cc-soft:#f2e9e3;
+            --cf:#1f6fa8;
+            --cf-soft:#e6f1f9;
+
+            --gold:#a9791b;
+            --gold-bg:#f7e7bd;
+            --silver:#5b6579;
+            --silver-bg:#e4e8f0;
+            --bronze:#95511f;
+            --bronze-bg:#f4dcc4;
+
+            --radius-sm:6px;
+            --radius:10px;
+            --radius-lg:18px;
+            --shadow-sm:0 1px 2px rgba(11,18,32,.05);
+            --shadow:0 1px 3px rgba(11,18,32,.06), 0 8px 20px -12px rgba(11,18,32,.12);
+            --shadow-lg:0 24px 60px -16px rgba(11,18,32,.35);
+
+            --font-display:'Space Grotesk',ui-sans-serif,system-ui,sans-serif;
+            --font-body:'Inter',ui-sans-serif,system-ui,sans-serif;
+            --font-mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+        }
+
+        *{margin:0;padding:0;box-sizing:border-box;}
+        html{-webkit-text-size-adjust:100%;}
+        body{
+            font-family:var(--font-body);
+            background:var(--canvas);
+            color:var(--text);
+            min-height:100vh;
+            -webkit-font-smoothing:antialiased;
+        }
+
+        ::selection{background:var(--primary-soft);color:var(--primary-dark);}
+
+        button, input, select{font-family:inherit;}
+
+        :focus-visible{outline:2px solid var(--primary);outline-offset:2px;border-radius:4px;}
+
+        .icon{width:15px;height:15px;flex-shrink:0;vertical-align:-3px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;}
+        .icon-sm{width:13px;height:13px;}
 
         /* NAV */
-        .navbar{background:#0f172a;color:white;padding:0 30px;height:60px;display:flex;align-items:center;justify-content:space-between;}
-        .navbar h1{font-size:20px;color:#60a5fa;}
+        .navbar{
+            background:linear-gradient(180deg,var(--ink) 0%, var(--ink-2) 100%);
+            color:white;
+            padding:0 30px;
+            height:60px;
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            box-shadow:0 1px 0 rgba(255,255,255,0.06), 0 6px 18px -10px rgba(0,0,0,.5);
+            position:sticky;
+            top:0;
+            z-index:200;
+        }
+        .navbar h1{
+            font-family:var(--font-display);
+            font-size:19px;
+            font-weight:700;
+            color:#ffffff;
+            letter-spacing:.2px;
+            display:flex;
+            align-items:center;
+            gap:9px;
+        }
+        .navbar h1 .icon{width:19px;height:19px;color:#7ba4ff;}
         .nav-right{display:flex;align-items:center;gap:16px;}
-        .nav-right span{font-size:13px;color:#94a3b8;}
-        .logout-btn{padding:8px 16px;background:#ef4444;color:white;border:none;border-radius:6px;cursor:pointer;font-size:13px;font-weight:600;}
-        .logout-btn:hover{background:#dc2626;}
+        .nav-right span{font-size:12.5px;color:#a9b3c9;font-weight:500;}
+        .logout-btn{
+            padding:8px 16px;
+            background:rgba(209,68,58,0.16);
+            color:#ff9d94;
+            border:1px solid rgba(209,68,58,0.35);
+            border-radius:7px;
+            cursor:pointer;
+            font-size:12.5px;
+            font-weight:600;
+            transition:.15s;
+        }
+        .logout-btn:hover{background:var(--danger);border-color:var(--danger);color:white;}
 
         /* TABS */
-        .tab-bar{background:white;border-bottom:2px solid #e2e8f0;display:flex;padding:0 30px;}
-        .tab-btn{padding:16px 22px;border:none;background:none;font-size:14px;font-weight:600;color:#64748b;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:0.2s;}
-        .tab-btn.active{color:#2563eb;border-bottom-color:#2563eb;}
-        .tab-btn:hover{color:#2563eb;}
+        .tab-bar{
+            background:var(--surface);
+            border-bottom:1px solid var(--border);
+            display:flex;
+            padding:0 30px;
+            overflow-x:auto;
+            scrollbar-width:none;
+            position:sticky;
+            top:60px;
+            z-index:150;
+        }
+        .tab-bar::-webkit-scrollbar{display:none;}
+        .tab-btn{
+            padding:15px 20px;
+            border:none;
+            background:none;
+            font-family:var(--font-body);
+            font-size:13.5px;
+            font-weight:600;
+            color:var(--muted);
+            cursor:pointer;
+            border-bottom:2.5px solid transparent;
+            margin-bottom:-1px;
+            transition:.15s;
+            white-space:nowrap;
+            display:flex;
+            align-items:center;
+            gap:8px;
+        }
+        .tab-btn .icon{color:currentColor;opacity:.85;}
+        .tab-btn.active{color:var(--primary);border-bottom-color:var(--primary);}
+        .tab-btn:hover{color:var(--primary-dark);}
         .tab-content{display:none;}
-        .tab-content.active{display:block;}
+        .tab-content.active{display:block;animation:fadeIn .25s ease;}
+
+        @keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
 
         /* MAIN */
-        .main{padding:24px 30px;}
+        .main{padding:24px 30px 60px;max-width:1600px;margin:0 auto;}
 
         /* SUMMARY */
-        .summary-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:22px;}
-        .summary-card{background:white;border-radius:12px;padding:18px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,0.06);}
-        .summary-card h3{font-size:12px;color:#64748b;margin-bottom:6px;}
-        .summary-card p{font-size:26px;font-weight:bold;color:#2563eb;}
+        .summary-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:18px;}
+        .summary-card{
+            background:var(--surface);
+            border-radius:var(--radius-lg);
+            border:1px solid var(--border);
+            padding:18px 18px 16px;
+            text-align:left;
+            box-shadow:var(--shadow-sm);
+            position:relative;
+            overflow:hidden;
+        }
+        .summary-card::before{
+            content:"";
+            position:absolute;top:0;left:0;right:0;height:3px;
+            background:linear-gradient(90deg,var(--primary),#7ba4ff);
+        }
+        .summary-card h3{
+            font-size:11px;
+            color:var(--muted);
+            margin-bottom:8px;
+            font-weight:600;
+            text-transform:uppercase;
+            letter-spacing:.55px;
+        }
+        .summary-card p{
+            font-family:var(--font-mono);
+            font-size:26px;
+            font-weight:700;
+            color:var(--ink);
+            font-variant-numeric:tabular-nums;
+        }
+
+        /* LAST UPDATED STRIP */
+        #lastUpdatedStrip{
+            background:var(--surface);
+            border:1px solid var(--border);
+            border-radius:var(--radius);
+            padding:11px 20px;
+            margin-bottom:18px;
+            box-shadow:var(--shadow-sm);
+            display:flex;
+            align-items:center;
+            gap:24px;
+            flex-wrap:wrap;
+        }
+        #lastUpdatedStrip > span:first-child{
+            font-size:11px;font-weight:700;color:var(--muted);
+            text-transform:uppercase;letter-spacing:.55px;
+        }
+        #lastUpdatedStrip span{
+            font-size:12.5px;color:var(--muted);
+            display:inline-flex;align-items:center;gap:6px;
+            font-family:var(--font-mono);
+        }
+        .status-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+        .status-dot.lc{background:var(--lc);}
+        .status-dot.cc{background:var(--cc);}
+        .status-dot.cf{background:var(--cf);}
 
         /* PANEL */
-        .panel{background:white;border-radius:12px;padding:22px;box-shadow:0 1px 4px rgba(0,0,0,0.06);margin-bottom:20px;}
+        .panel{
+            background:var(--surface);
+            border:1px solid var(--border);
+            border-radius:var(--radius-lg);
+            padding:22px;
+            box-shadow:var(--shadow-sm);
+            margin-bottom:20px;
+        }
         .panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:10px;}
-        .panel-header h2{font-size:17px;color:#0f172a;}
+        .panel-header h2{
+            font-family:var(--font-display);
+            font-size:16.5px;
+            font-weight:700;
+            color:var(--ink);
+            display:flex;align-items:center;gap:9px;
+        }
+        .panel-header h2 .icon{width:17px;height:17px;color:var(--primary);}
         .panel-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
 
         /* FILTER */
         .filter-bar{display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap;align-items:center;}
-        .filter-bar input,.filter-bar select{padding:9px 13px;border:1px solid #cbd5e1;border-radius:8px;font-size:13px;outline:none;}
-        .filter-bar input:focus,.filter-bar select:focus{border-color:#2563eb;}
+        .filter-bar input,.filter-bar select{
+            padding:9px 13px;
+            border:1px solid var(--border-strong);
+            border-radius:8px;
+            font-size:13px;
+            outline:none;
+            background:var(--surface);
+            color:var(--text);
+            transition:.15s;
+        }
+        .filter-bar input:focus,.filter-bar select:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-soft);}
         .filter-bar input{min-width:240px;}
+        .filter-bar input::placeholder{color:#9aa4bb;}
 
         /* BUTTONS */
-        .btn{padding:9px 16px;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;transition:0.2s;white-space:nowrap;}
-        .btn-primary{background:#2563eb;color:white;} .btn-primary:hover{background:#1d4ed8;}
-        .btn-success{background:#16a34a;color:white;} .btn-success:hover{background:#15803d;}
-        .btn-danger{background:#ef4444;color:white;} .btn-danger:hover{background:#dc2626;}
-        .btn-warning{background:#f59e0b;color:white;} .btn-warning:hover{background:#d97706;}
-        .btn-purple{background:#7c3aed;color:white;} .btn-purple:hover{background:#6d28d9;}
-        .btn-teal{background:#0d9488;color:white;} .btn-teal:hover{background:#0f766e;}
+        .btn{
+            padding:9px 16px;
+            border:none;
+            border-radius:8px;
+            font-size:13px;
+            font-weight:600;
+            cursor:pointer;
+            transition:.15s;
+            white-space:nowrap;
+            display:inline-flex;
+            align-items:center;
+            gap:7px;
+            box-shadow:0 1px 2px rgba(11,18,32,.05);
+        }
+        .btn:active{transform:translateY(1px);}
+        .btn-primary{background:var(--primary);color:white;} .btn-primary:hover{background:var(--primary-dark);}
+        .btn-success{background:var(--success);color:white;} .btn-success:hover{background:var(--success-dark);}
+        .btn-danger{background:var(--danger);color:white;} .btn-danger:hover{background:var(--danger-dark);}
+        .btn-warning{background:var(--warning);color:white;} .btn-warning:hover{background:var(--warning-dark);}
+        .btn-purple{background:var(--purple);color:white;} .btn-purple:hover{background:var(--purple-dark);}
+        .btn-teal{background:var(--teal);color:white;} .btn-teal:hover{background:var(--teal-dark);}
         .btn-sm{padding:5px 10px;font-size:12px;}
 
         /* TABLE */
-        .table-wrap{overflow-x:auto;}
-        table{width:100%;border-collapse:collapse;font-size:13px;}
-        thead tr{background:#1e3a5f;color:white;}
-        th{padding:11px 12px;text-align:left;white-space:nowrap;}
-        td{padding:10px 12px;border-bottom:1px solid #f1f5f9;white-space:nowrap;}
-        tr:hover td{background:#f8fafc;}
+        .table-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:var(--radius);}
+        table{width:100%;border-collapse:collapse;font-size:13px;min-width:900px;}
+        thead tr{background:var(--ink-2);color:#e7ecf8;}
+        th{
+            padding:12px;
+            text-align:left;
+            white-space:nowrap;
+            font-size:11px;
+            font-weight:700;
+            text-transform:uppercase;
+            letter-spacing:.5px;
+            color:#c3ccdf;
+        }
+        td{padding:10px 12px;border-bottom:1px solid var(--border);white-space:nowrap;color:var(--text);}
+        tbody tr:last-child td{border-bottom:none;}
+        tr:hover td{background:#f7f9fd;}
 
         /* BADGES */
-        .badge{padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;}
-        .badge-ece{background:#dbeafe;color:#1d4ed8;} .badge-cse{background:#dcfce7;color:#15803d;}
-        .badge-mech{background:#fef9c3;color:#92400e;} .badge-it{background:#fce7f3;color:#9d174d;}
-        .badge-eee{background:#ede9fe;color:#6d28d9;} .badge-dept{background:#e0f2fe;color:#0369a1;}
-        .rank-badge{background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:700;}
-        .rank-1{background:#ffd700;color:#78350f;}
-        .rank-2{background:#e2e8f0;color:#374151;}
-        .rank-3{background:#fed7aa;color:#9a3412;}
+        .badge{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:.2px;}
+        .badge-ece{background:#dfeafe;color:#1d4ed8;} .badge-cse{background:#dcf5e6;color:#0f7a44;}
+        .badge-mech{background:var(--warning-soft);color:var(--warning-dark);} .badge-it{background:#fbe4f0;color:#a3195b;}
+        .badge-eee{background:var(--purple-soft);color:var(--purple-dark);} .badge-dept{background:#dff0fc;color:#0369a1;}
+
+        .rank-badge{
+            background:#f1f2f5;color:#4b5568;
+            padding:3px 9px;border-radius:12px;font-size:11.5px;font-weight:700;
+            font-family:var(--font-mono);
+        }
+        .rank-1{background:linear-gradient(135deg,#f9e5ad,var(--gold-bg));color:var(--gold);box-shadow:inset 0 0 0 1px rgba(169,121,27,.25);}
+        .rank-2{background:linear-gradient(135deg,#eef1f7,var(--silver-bg));color:var(--silver);box-shadow:inset 0 0 0 1px rgba(91,101,121,.2);}
+        .rank-3{background:linear-gradient(135deg,#f7e1c9,var(--bronze-bg));color:var(--bronze);box-shadow:inset 0 0 0 1px rgba(149,81,31,.22);}
 
         /* MODAL */
-        .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1000;justify-content:center;align-items:flex-start;padding-top:40px;}
+        .modal-overlay{
+            display:none;position:fixed;inset:0;background:rgba(11,18,32,0.55);
+            z-index:1000;justify-content:center;align-items:flex-start;padding:40px 16px;
+            overflow-y:auto;backdrop-filter:blur(1.5px);
+        }
         .modal-overlay.active{display:flex;}
-        .modal-box{background:white;border-radius:16px;padding:28px;width:100%;max-width:580px;max-height:88vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.2);}
-        .modal-box h2{font-size:19px;color:#0f172a;margin-bottom:4px;}
-        .modal-sub{font-size:12px;color:#64748b;margin-bottom:18px;}
-        .section-title{font-size:11px;font-weight:700;color:#2563eb;text-transform:uppercase;letter-spacing:0.5px;margin:16px 0 8px;padding-bottom:4px;border-bottom:2px solid #dbeafe;}
+        .modal-box{
+            background:var(--surface);border-radius:var(--radius-lg);padding:28px;
+            width:100%;max-width:580px;max-height:88vh;overflow-y:auto;
+            box-shadow:var(--shadow-lg);
+            animation:modalIn .18s ease;
+        }
+        @keyframes modalIn{from{opacity:0;transform:translateY(10px) scale(.98);}to{opacity:1;transform:translateY(0) scale(1);}}
+        .modal-box h2{font-family:var(--font-display);font-size:19px;font-weight:700;color:var(--ink);margin-bottom:4px;}
+        .modal-sub{font-size:12.5px;color:var(--muted);margin-bottom:18px;}
+        .section-title{
+            font-size:11px;font-weight:700;color:var(--primary);text-transform:uppercase;
+            letter-spacing:.6px;margin:16px 0 8px;padding-bottom:6px;border-bottom:2px solid var(--primary-soft);
+        }
         .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-        .form-group{display:flex;flex-direction:column;gap:3px;}
-        .form-group label{font-size:11px;font-weight:600;color:#374151;}
-        .form-group input,.form-group select{padding:9px 11px;border:1px solid #cbd5e1;border-radius:7px;font-size:13px;}
-        .form-group input:focus,.form-group select:focus{outline:none;border-color:#2563eb;}
+        .form-group{display:flex;flex-direction:column;gap:4px;}
+        .form-group label{font-size:11px;font-weight:600;color:#3c4358;}
+        .form-group input,.form-group select{
+            padding:9px 11px;border:1px solid var(--border-strong);border-radius:7px;font-size:13px;
+            background:var(--surface);color:var(--text);
+        }
+        .form-group input:focus,.form-group select:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-soft);}
         .modal-footer{display:flex;gap:10px;margin-top:18px;justify-content:flex-end;}
-        .modal-msg{font-size:12px;margin-top:8px;text-align:center;}
+        .modal-msg{font-size:12px;margin-top:8px;text-align:center;color:var(--muted);}
 
         /* EXPORT MODAL */
-        .export-box{background:white;border-radius:16px;padding:26px;width:100%;max-width:500px;max-height:88vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.2);}
+        .export-box{
+            background:var(--surface);border-radius:var(--radius-lg);padding:26px;
+            width:100%;max-width:500px;max-height:88vh;overflow-y:auto;
+            box-shadow:var(--shadow-lg);animation:modalIn .18s ease;
+        }
         .export-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
-        .close-x{font-size:22px;cursor:pointer;color:#94a3b8;} .close-x:hover{color:#0f172a;}
+        .export-header h2{font-family:var(--font-display);font-size:18px;font-weight:700;color:var(--ink);}
+        .close-x{font-size:22px;cursor:pointer;color:#9aa4bb;line-height:1;} .close-x:hover{color:var(--ink);}
         .export-toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
-        .export-toolbar p{font-size:12px;color:#94a3b8;}
-        .sel-all-btn{padding:4px 10px;border:1px solid #cbd5e1;border-radius:6px;background:white;font-size:11px;cursor:pointer;font-weight:600;}
+        .export-toolbar p{font-size:12px;color:#9aa4bb;}
+        .sel-all-btn{padding:4px 10px;border:1px solid var(--border-strong);border-radius:6px;background:var(--surface);font-size:11px;cursor:pointer;font-weight:600;color:var(--text);}
+        .sel-all-btn:hover{border-color:var(--primary);color:var(--primary);}
         #sortableColumns{max-height:380px;overflow-y:auto;padding-right:2px;}
-        .col-group{font-size:10px;font-weight:700;color:#2563eb;text-transform:uppercase;letter-spacing:0.5px;padding:8px 4px 4px;}
-        .column-card{display:flex;align-items:center;gap:9px;background:#f8fafc;padding:9px 11px;border-radius:8px;margin-bottom:5px;cursor:grab;border:1px solid #e2e8f0;transition:0.15s;user-select:none;}
-        .column-card:hover{background:#eff6ff;border-color:#bfdbfe;}
+        .col-group{font-size:10px;font-weight:700;color:var(--primary);text-transform:uppercase;letter-spacing:.55px;padding:10px 4px 5px;display:flex;align-items:center;gap:6px;}
+        .column-card{
+            display:flex;align-items:center;gap:9px;background:var(--canvas);padding:9px 11px;
+            border-radius:8px;margin-bottom:5px;cursor:grab;border:1px solid var(--border);transition:.15s;user-select:none;
+        }
+        .column-card:hover{background:var(--primary-soft);border-color:#c7d5f9;}
         .column-card.dragging{opacity:0.4;}
-        .column-card input[type=checkbox]{width:14px;height:14px;cursor:pointer;}
-        .column-card span{font-size:12px;color:#374151;}
-        .export-btn-main{width:100%;margin-top:12px;padding:12px;border:none;border-radius:9px;background:#2563eb;color:white;font-size:14px;font-weight:600;cursor:pointer;}
-        .export-btn-main:hover{background:#1d4ed8;}
+        .column-card input[type=checkbox]{width:14px;height:14px;cursor:pointer;accent-color:var(--primary);}
+        .column-card span{font-size:12.5px;color:#374151;display:flex;align-items:center;gap:7px;}
+        .column-card .icon{color:var(--muted);}
+        .export-btn-main{
+            width:100%;margin-top:14px;padding:12px;border:none;border-radius:9px;background:var(--primary);
+            color:white;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;
+        }
+        .export-btn-main:hover{background:var(--primary-dark);}
 
         /* DEPT CARDS */
         .dept-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;}
-        .dept-card{background:white;border-radius:12px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,0.06);border-left:4px solid #2563eb;}
-        .dept-card h3{font-size:15px;color:#0f172a;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
-        .dept-stat{display:flex;justify-content:space-between;font-size:13px;color:#64748b;margin-bottom:6px;}
-        .dept-stat span:last-child{font-weight:700;color:#0f172a;}
+        .dept-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow-sm);border-left:4px solid var(--primary);}
+        .dept-card h3{font-family:var(--font-display);font-size:15px;font-weight:700;color:var(--ink);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+        .dept-stat{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:6px;}
+        .dept-stat span:last-child{font-weight:700;color:var(--ink);font-family:var(--font-mono);}
         .dept-actions{display:flex;gap:8px;margin-top:14px;}
 
         /* TOAST */
-        .toast{position:fixed;bottom:24px;right:24px;background:#0f172a;color:white;padding:12px 20px;border-radius:10px;font-size:13px;z-index:9999;display:none;box-shadow:0 4px 20px rgba(0,0,0,0.3);}
+        .toast{
+            position:fixed;bottom:24px;right:24px;left:auto;background:var(--ink);color:white;
+            padding:12px 20px;border-radius:10px;font-size:13px;z-index:9999;display:none;
+            box-shadow:var(--shadow-lg);max-width:calc(100vw - 48px);
+        }
         .toast.show{display:block;animation:slideIn 0.3s ease;}
         @keyframes slideIn{from{transform:translateY(20px);opacity:0;}to{transform:translateY(0);opacity:1;}}
 
@@ -123,49 +404,85 @@
         @keyframes spin{to{transform:rotate(360deg);}}
 
         @media(max-width:1200px){.summary-grid{grid-template-columns:repeat(3,1fr);}}
-        @media(max-width:900px){.summary-grid{grid-template-columns:repeat(2,1fr);}.main{padding:16px;}.form-grid{grid-template-columns:1fr;}}
+        @media(max-width:900px){
+            .summary-grid{grid-template-columns:repeat(2,1fr);}
+            .main{padding:16px 16px 48px;}
+            .form-grid{grid-template-columns:1fr;}
+            .navbar{padding:0 16px;}
+            .tab-bar{padding:0 16px;}
+        }
+        @media(max-width:640px){
+            .summary-grid{grid-template-columns:1fr 1fr;gap:10px;}
+            .summary-card{padding:14px;}
+            .summary-card p{font-size:21px;}
+            .navbar h1{font-size:16px;}
+            .nav-right span{display:none;}
+            .panel{padding:16px;border-radius:var(--radius);}
+            .panel-header{flex-direction:column;align-items:flex-start;}
+            .panel-actions{width:100%;}
+            .panel-actions .btn{flex:1 1 auto;justify-content:center;}
+            .filter-bar input{min-width:0;width:100%;}
+            .filter-bar{flex-direction:column;align-items:stretch;}
+            .filter-bar select{width:100%;}
+            .modal-box,.export-box{padding:20px;border-radius:var(--radius);}
+            .toast{right:16px;left:16px;bottom:16px;}
+            #lastUpdatedStrip{flex-direction:column;align-items:flex-start;gap:8px;}
+        }
+
+        @media (prefers-reduced-motion: reduce){
+            *{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;}
+        }
 
         .contest-card {
-    background: white;
-    border-radius: 10px;
-    padding: 14px 16px;
-    margin-bottom: 10px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-    display: flex;
-    align-items: center;
-    gap: 14px;
-}
-.contest-card.lc        { border-left: 4px solid #f59e0b; }
-.contest-card.cc        { border-left: 4px solid #7c3aed; }
-.contest-card.cf        { border-left: 4px solid #2563eb; }
-.contest-card.past-card { border-left: 4px solid #94a3b8; opacity:0.85; }
-.contest-platform {
-    font-size: 11px; font-weight: 700;
-    padding: 3px 10px; border-radius: 20px;
-    background: #f1f5f9; color: #475569;
-    white-space: nowrap; min-width: 90px; text-align: center;
-}
-.contest-name { font-size: 13px; font-weight: 600; color: #0f172a; }
-.contest-time {
-    font-size: 11px; color: #64748b;
-    margin-top: 3px; line-height: 1.6;
-}
-.contest-link {
-    padding: 7px 14px; border-radius: 6px;
-    font-size: 12px; font-weight: 600;
-    text-decoration: none; white-space: nowrap;
-    color: white; background: #2563eb; margin-left: auto;
-}
-.contest-link:hover { background: #1d4ed8; }
-.contest-link.grey  { background: #64748b; }
-.contest-link.grey:hover { background: #475569; }
+            background: var(--surface);
+            border:1px solid var(--border);
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin-bottom: 10px;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex-wrap:wrap;
+        }
+        .contest-card.lc        { border-left: 4px solid var(--lc); }
+        .contest-card.cc        { border-left: 4px solid var(--cc); }
+        .contest-card.cf        { border-left: 4px solid var(--cf); }
+        .contest-card.past-card { border-left: 4px solid var(--border-strong); opacity:0.85; }
+        .contest-platform {
+            font-size: 11px; font-weight: 700;
+            padding: 3px 10px; border-radius: 20px;
+            background: var(--canvas); color: var(--muted);
+            white-space: nowrap; min-width: 90px; text-align: center;
+        }
+        .contest-card.lc .contest-platform{background:var(--lc-soft);color:var(--lc);}
+        .contest-card.cc .contest-platform{background:var(--cc-soft);color:var(--cc);}
+        .contest-card.cf .contest-platform{background:var(--cf-soft);color:var(--cf);}
+        .contest-name { font-size: 13px; font-weight: 600; color: var(--ink); }
+        .contest-time {
+            font-size: 11px; color: var(--muted);
+            margin-top: 3px; line-height: 1.6;
+            font-family:var(--font-mono);
+        }
+        .contest-link {
+            padding: 7px 14px; border-radius: 6px;
+            font-size: 12px; font-weight: 600;
+            text-decoration: none; white-space: nowrap;
+            color: white; background: var(--primary); margin-left: auto;
+        }
+        .contest-link:hover { background: var(--primary-dark); }
+        .contest-link.grey  { background: var(--muted); }
+        .contest-link.grey:hover { background: #4b5568; }
     </style>
 </head>
 <body>
 
 <!-- NAVBAR -->
 <div class="navbar">
-    <h1>⚡ CodeTrack — Admin</h1>
+    <h1>
+        <svg class="icon" viewBox="0 0 24 24"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z"/></svg>
+        CodeTrack — Admin
+    </h1>
     <div class="nav-right">
         <span id="adminEmail"></span>
         <button class="logout-btn" onclick="logout()">Logout</button>
@@ -174,10 +491,22 @@
 
 <!-- TABS -->
 <div class="tab-bar">
-    <button class="tab-btn active" onclick="switchTab('students',this)">🎓 Students</button>
-    <button class="tab-btn" onclick="switchTab('advisors',this)">👨‍🏫 Advisors</button>
-    <button class="tab-btn" onclick="switchTab('analytics',this)">📊 Department Analytics</button>
-    <button class="tab-btn" onclick="switchTab('contests',this)">🏆 Contests</button>
+    <button class="tab-btn active" onclick="switchTab('students',this)">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c0 1.5 2.7 3 6 3s6-1.5 6-3v-5"/></svg>
+        Students
+    </button>
+    <button class="tab-btn" onclick="switchTab('advisors',this)">
+        <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        Advisors
+    </button>
+    <button class="tab-btn" onclick="switchTab('analytics',this)">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M4 20V10M12 20V4M20 20v-7"/></svg>
+        Department Analytics
+    </button>
+    <button class="tab-btn" onclick="switchTab('contests',this)">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0V4Z"/><path d="M7 5H4a3 3 0 0 0 3 5M17 5h3a3 3 0 0 1-3 5"/></svg>
+        Contests
+    </button>
 </div>
 
 <div class="main">
@@ -193,21 +522,35 @@
             <div class="summary-card"><h3>Avg Total Solved</h3><p id="avgSolved">0</p></div>
 
         </div>
-        <!-- ADD this after </div> of summary-grid and before <div class="panel"> -->
-        <div id="lastUpdatedStrip" style="background:white;border-radius:10px;padding:12px 20px;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,0.06);display:flex;align-items:center;gap:24px;flex-wrap:wrap;">
-            <span style="font-size:12px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.4px;">Platform Last Updated</span>
-            <span id="stripLC" style="font-size:12px;color:#64748b;">🟡 LeetCode: —</span>
-            <span id="stripCC" style="font-size:12px;color:#64748b;">⭐ CodeChef: —</span>
-            <span id="stripCF" style="font-size:12px;color:#64748b;">🔵 Codeforces: —</span>
+        <div id="lastUpdatedStrip">
+            <span>Platform Last Updated</span>
+            <span id="stripLC"><span class="status-dot lc"></span>LeetCode: —</span>
+            <span id="stripCC"><span class="status-dot cc"></span>CodeChef: —</span>
+            <span id="stripCF"><span class="status-dot cf"></span>Codeforces: —</span>
         </div>
         <div class="panel">
             <div class="panel-header">
-                <h2>All Students</h2>
+                <h2>
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c0 1.5 2.7 3 6 3s6-1.5 6-3v-5"/></svg>
+                    All Students
+                </h2>
                 <div class="panel-actions">
-                    <button class="btn btn-success" onclick="openCreateStudentModal()">+ Create Student</button>
-                    <button class="btn btn-purple" onclick="refreshAllStudents()" id="refreshAllBtn">🔄 Refresh All Stats</button>
-                    <button class="btn btn-teal" onclick="recalculateRanks()" id="rankBtn">🏆 Recalculate Ranks</button>
-                    <button class="btn btn-primary" onclick="openExportModal()">📥 Export Excel</button>
+                    <button class="btn btn-success" onclick="openCreateStudentModal()">
+                        <svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+                        Create Student
+                    </button>
+                    <button class="btn btn-purple" onclick="refreshAllStudents()" id="refreshAllBtn">
+                        <svg class="icon" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-2.6-6.3M21 4v5h-5"/></svg>
+                        Refresh All Stats
+                    </button>
+                    <button class="btn btn-teal" onclick="recalculateRanks()" id="rankBtn">
+                        <svg class="icon" viewBox="0 0 24 24"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0V4Z"/><path d="M7 5H4a3 3 0 0 0 3 5M17 5h3a3 3 0 0 1-3 5"/></svg>
+                        Recalculate Ranks
+                    </button>
+                    <button class="btn btn-primary" onclick="openExportModal()">
+                        <svg class="icon" viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>
+                        Export Excel
+                    </button>
                 </div>
             </div>
 
@@ -259,12 +602,16 @@
     <div id="tab-advisors" class="tab-content">
         <div class="panel">
             <div class="panel-header">
-                <h2>All Advisors</h2>
+                <h2>
+                    <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                    All Advisors
+                </h2>
                 <div class="panel-actions">
                     <!-- Change this button to use new flow -->
                     <button class="btn btn-success"
                             onclick="openCreateAdvisorModal()">
-                        + Create Advisor Account
+                        <svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+                        Create Advisor Account
                     </button>
                 </div>
             </div>
@@ -295,10 +642,19 @@
     <div id="tab-analytics" class="tab-content">
         <div class="panel" style="margin-bottom:20px">
             <div class="panel-header">
-                <h2>Department Analytics</h2>
+                <h2>
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M4 20V10M12 20V4M20 20v-7"/></svg>
+                    Department Analytics
+                </h2>
                 <div class="panel-actions">
-                    <button class="btn btn-purple" onclick="refreshAllStudents()">🔄 Refresh All Stats</button>
-                    <button class="btn btn-teal" onclick="recalculateRanks()">🏆 Recalculate Ranks</button>
+                    <button class="btn btn-purple" onclick="refreshAllStudents()">
+                        <svg class="icon" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-2.6-6.3M21 4v5h-5"/></svg>
+                        Refresh All Stats
+                    </button>
+                    <button class="btn btn-teal" onclick="recalculateRanks()">
+                        <svg class="icon" viewBox="0 0 24 24"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0V4Z"/><path d="M7 5H4a3 3 0 0 0 3 5M17 5h3a3 3 0 0 1-3 5"/></svg>
+                        Recalculate Ranks
+                    </button>
                 </div>
             </div>
             <div class="dept-grid" id="deptAnalyticsGrid"></div>
@@ -306,13 +662,23 @@
     </div>
     <div id="tab-contests" class="tab-content">
         <div class="panel">
-            <div class="panel-header"><h2>🏆 Upcoming Contests</h2></div>
-            <div id="upcomingContests" style="margin-bottom:24px">
-                <div style="color:#94a3b8">Loading...</div>
+            <div class="panel-header">
+                <h2>
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0V4Z"/><path d="M7 5H4a3 3 0 0 0 3 5M17 5h3a3 3 0 0 1-3 5"/></svg>
+                    Upcoming Contests
+                </h2>
             </div>
-            <div class="panel-header"><h2>📋 Recent Contests</h2></div>
+            <div id="upcomingContests" style="margin-bottom:24px">
+                <div style="color:#9aa4bb">Loading...</div>
+            </div>
+            <div class="panel-header">
+                <h2>
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
+                    Recent Contests
+                </h2>
+            </div>
             <div id="pastContests">
-                <div style="color:#94a3b8">Loading...</div>
+                <div style="color:#9aa4bb">Loading...</div>
             </div>
         </div>
     </div>
@@ -325,7 +691,7 @@
     <div class="modal-box" style="max-width:520px">
         <h2>Create Student Account</h2>
         <p class="modal-sub">Student will use these credentials to login</p>
-        <p class="section-title">LOGIN CREDENTIALS</p>
+        <p class="section-title">Login Credentials</p>
         <div class="form-grid">
             <div class="form-group">
                 <label>Full Name *</label>
@@ -419,22 +785,22 @@
             <button class="sel-all-btn" onclick="toggleSelectAll()">Select All</button>
         </div>
         <div id="sortableColumns">
-            <div class="col-group">📋 Basic Info</div>
-            <div class="column-card" draggable="true"><input type="checkbox" value="name" checked><span>👤 Name</span></div>
-            <div class="column-card" draggable="true"><input type="checkbox" value="registerNumber" checked><span>🔢 Register Number</span></div>
-            <div class="column-card" draggable="true"><input type="checkbox" value="department" checked><span>🏛 Department</span></div>
-            <div class="column-card" draggable="true"><input type="checkbox" value="section" checked><span>📌 Section</span></div>
-            <div class="column-card" draggable="true"><input type="checkbox" value="year" checked><span>📅 Year</span></div>
-            <div class="column-card" draggable="true"><input type="checkbox" value="email"><span>📧 Email</span></div>
-            <div class="column-card" draggable="true"><input type="checkbox" value="phoneNumber"><span>📞 Phone</span></div>
-            <div class="col-group">🔗 Usernames</div>
-            <div class="column-card" draggable="true"><input type="checkbox" value="leetcodeUsername" checked><span>🟡 LeetCode Username</span></div>
-            <div class="column-card" draggable="true"><input type="checkbox" value="codechefUsername" checked><span>⭐ CodeChef Username</span></div>
-            <div class="column-card" draggable="true"><input type="checkbox" value="codeforcesUsername" checked><span>🔵 Codeforces Username</span></div>
-            <div class="column-card" draggable="true"><input type="checkbox" value="githubUsername"><span>🐙 GitHub</span></div>
-            <div class="column-card" draggable="true"><input type="checkbox" value="hackerrankUsername"><span>🟢 HackerRank</span></div>
-            <div class="column-card" draggable="true"><input type="checkbox" value="geeksforgeeksUsername"><span>🟩 GeeksforGeeks</span></div>
-            <div class="col-group">🟡 LeetCode Stats</div>
+            <div class="col-group">Basic Info</div>
+            <div class="column-card" draggable="true"><input type="checkbox" value="name" checked><span>Name</span></div>
+            <div class="column-card" draggable="true"><input type="checkbox" value="registerNumber" checked><span>Register Number</span></div>
+            <div class="column-card" draggable="true"><input type="checkbox" value="department" checked><span>Department</span></div>
+            <div class="column-card" draggable="true"><input type="checkbox" value="section" checked><span>Section</span></div>
+            <div class="column-card" draggable="true"><input type="checkbox" value="year" checked><span>Year</span></div>
+            <div class="column-card" draggable="true"><input type="checkbox" value="email"><span>Email</span></div>
+            <div class="column-card" draggable="true"><input type="checkbox" value="phoneNumber"><span>Phone</span></div>
+            <div class="col-group">Usernames</div>
+            <div class="column-card" draggable="true"><input type="checkbox" value="leetcodeUsername" checked><span>LeetCode Username</span></div>
+            <div class="column-card" draggable="true"><input type="checkbox" value="codechefUsername" checked><span>CodeChef Username</span></div>
+            <div class="column-card" draggable="true"><input type="checkbox" value="codeforcesUsername" checked><span>Codeforces Username</span></div>
+            <div class="column-card" draggable="true"><input type="checkbox" value="githubUsername"><span>GitHub</span></div>
+            <div class="column-card" draggable="true"><input type="checkbox" value="hackerrankUsername"><span>HackerRank</span></div>
+            <div class="column-card" draggable="true"><input type="checkbox" value="geeksforgeeksUsername"><span>GeeksforGeeks</span></div>
+            <div class="col-group">LeetCode Stats</div>
             <div class="column-card" draggable="true"><input type="checkbox" value="leetcodeEasySolved" checked><span>Easy Solved</span></div>
             <div class="column-card" draggable="true"><input type="checkbox" value="leetcodeMediumSolved" checked><span>Medium Solved</span></div>
             <div class="column-card" draggable="true"><input type="checkbox" value="leetcodeHardSolved" checked><span>Hard Solved</span></div>
@@ -443,7 +809,7 @@
             <div class="column-card" draggable="true"><input type="checkbox" value="leetcodeContestRating" checked><span>Contest Rating</span></div>
             <div class="column-card" draggable="true"><input type="checkbox" value="leetcodeGlobalRank"><span>Global Rank</span></div>
             <div class="column-card" draggable="true"><input type="checkbox" value="leetcodeTopPercentage"><span>Top %</span></div>
-            <div class="col-group">⭐ CodeChef Stats</div>
+            <div class="col-group">CodeChef Stats</div>
             <div class="column-card" draggable="true"><input type="checkbox" value="codechefCurrentRating" checked><span>Current Rating</span></div>
             <div class="column-card" draggable="true"><input type="checkbox" value="codechefHighestRating" checked><span>Highest Rating</span></div>
             <div class="column-card" draggable="true"><input type="checkbox" value="codechefDivision"><span>Division</span></div>
@@ -452,7 +818,7 @@
             <div class="column-card" draggable="true"><input type="checkbox" value="codechefCountryRank"><span>Country Rank</span></div>
             <div class="column-card" draggable="true"><input type="checkbox" value="codechefContests"><span>Contests</span></div>
             <div class="column-card" draggable="true"><input type="checkbox" value="codechefProblemsSolved" checked><span>Problems Solved</span></div>
-            <div class="col-group">🔵 Codeforces Stats</div>
+            <div class="col-group">Codeforces Stats</div>
             <div class="column-card" draggable="true"><input type="checkbox" value="codeforcesCurrentRating" checked><span>Current Rating</span></div>
             <div class="column-card" draggable="true"><input type="checkbox" value="codeforcesMaxRating" checked><span>Max Rating</span></div>
             <div class="column-card" draggable="true"><input type="checkbox" value="codeforcesCurrentRank"><span>Current Rank</span></div>
@@ -460,17 +826,20 @@
             <div class="column-card" draggable="true"><input type="checkbox" value="codeforcesProblemsCount" checked><span>Problems Count</span></div>
             <div class="column-card" draggable="true"><input type="checkbox" value="codeforcesContests"><span>Contests</span></div>
             <div class="column-card" draggable="true"><input type="checkbox" value="codeforcesLevel"><span>Level</span></div>
-            <div class="col-group">📊 Overall</div>
-            <div class="column-card" draggable="true"><input type="checkbox" value="totalSolved" checked><span>✅ Total Solved</span></div>
-            <div class="column-card" draggable="true"><input type="checkbox" value="totalContests"><span>🏆 Total Contests</span></div>
-            <div class="column-card" draggable="true"><input type="checkbox" value="highestRating" checked><span>📈 Highest Rating</span></div>
-            <div class="column-card" draggable="true"><input type="checkbox" value="departmentRank" checked><span>🥇 Department Rank</span></div>
-            <div class="column-card" draggable="true"><input type="checkbox" value="collegeRank" checked><span>🏅 College Rank</span></div>
-            <div class="column-card" draggable="true"><input type="checkbox" value="linkedinUrl"><span>💼 LinkedIn</span></div>
-            <div class="column-card" draggable="true"><input type="checkbox" value="portfolioUrl"><span>🌐 Portfolio</span></div>
-            <div class="column-card" draggable="true"><input type="checkbox" value="lastUpdated" checked><span>🕐 Last Updated</span></div>
+            <div class="col-group">Overall</div>
+            <div class="column-card" draggable="true"><input type="checkbox" value="totalSolved" checked><span>Total Solved</span></div>
+            <div class="column-card" draggable="true"><input type="checkbox" value="totalContests"><span>Total Contests</span></div>
+            <div class="column-card" draggable="true"><input type="checkbox" value="highestRating" checked><span>Highest Rating</span></div>
+            <div class="column-card" draggable="true"><input type="checkbox" value="departmentRank" checked><span>Department Rank</span></div>
+            <div class="column-card" draggable="true"><input type="checkbox" value="collegeRank" checked><span>College Rank</span></div>
+            <div class="column-card" draggable="true"><input type="checkbox" value="linkedinUrl"><span>LinkedIn</span></div>
+            <div class="column-card" draggable="true"><input type="checkbox" value="portfolioUrl"><span>Portfolio</span></div>
+            <div class="column-card" draggable="true"><input type="checkbox" value="lastUpdated" checked><span>Last Updated</span></div>
         </div>
-        <button class="export-btn-main" onclick="exportCustomExcel()">Export Selected Columns</button>
+        <button class="export-btn-main" onclick="exportCustomExcel()">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>
+            Export Selected Columns
+        </button>
     </div>
 </div>
 <!-- CREATE ADVISOR MODAL -->
