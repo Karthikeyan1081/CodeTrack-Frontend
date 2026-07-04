@@ -5,37 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Dashboard - CodeTrack</title>
     <style>
-        *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;}
-        body{background:#f1f5f9;min-height:100vh;}
+        *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;}
+        body{background:#eef1f7;min-height:100vh;color:#141a2c;-webkit-font-smoothing:antialiased;}
+        button,input{font-family:inherit;}
+        :focus-visible{outline:2px solid #2454d6;outline-offset:2px;border-radius:4px;}
+
+        .icon{width:15px;height:15px;flex-shrink:0;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;vertical-align:-3px;}
 
         /* NAVBAR */
-        .navbar{background:#0f172a;height:60px;padding:0 28px;display:flex;align-items:center;justify-content:space-between;}
-        .navbar h1{font-size:19px;color:#60a5fa;font-weight:700;}
+        .navbar{background:linear-gradient(180deg,#0b1220 0%,#16213f 100%);height:60px;padding:0 28px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 1px 0 rgba(255,255,255,0.06),0 6px 18px -10px rgba(0,0,0,.5);position:sticky;top:0;z-index:200;}
+        .navbar h1{font-size:19px;color:#ffffff;font-weight:700;display:flex;align-items:center;gap:9px;letter-spacing:.2px;}
+        .navbar h1 .icon{width:19px;height:19px;color:#7ba4ff;}
         .nav-right{display:flex;align-items:center;gap:16px;}
         .nav-info{display:flex;flex-direction:column;align-items:flex-end;}
-        .nav-info strong{font-size:14px;color:white;}
-        .nav-info span{font-size:12px;color:#94a3b8;}
-        .logout-btn{padding:7px 14px;background:#ef4444;color:white;border:none;border-radius:6px;cursor:pointer;font-size:13px;font-weight:600;}
-        .logout-btn:hover{background:#dc2626;}
+        .nav-info strong{font-size:14px;color:white;font-weight:600;}
+        .nav-info span{font-size:12px;color:#a9b3c9;}
+        .logout-btn{padding:7px 14px;background:rgba(209,68,58,0.16);color:#ff9d94;border:1px solid rgba(209,68,58,0.35);border-radius:6px;cursor:pointer;font-size:13px;font-weight:600;transition:.15s;}
+        .logout-btn:hover{background:#d1443a;border-color:#d1443a;color:white;}
 
         /* LAYOUT */
         .page{display:flex;gap:0;min-height:calc(100vh - 60px);}
 
         /* SIDEBAR */
-        .sidebar{width:260px;background:#0f172a;padding:24px 16px;display:flex;flex-direction:column;gap:6px;flex-shrink:0;}
+        .sidebar{width:260px;background:#0b1220;padding:24px 16px;display:flex;flex-direction:column;gap:6px;flex-shrink:0;}
         .sidebar-profile{text-align:center;padding:20px 10px 24px;border-bottom:1px solid #1e293b;margin-bottom:10px;}
-        .sidebar-avatar{width:80px;height:80px;border-radius:50%;border:3px solid #2563eb;margin-bottom:10px;object-fit:cover;}
+        .sidebar-avatar{width:80px;height:80px;border-radius:50%;border:3px solid #2454d6;margin-bottom:10px;object-fit:cover;}
         .sidebar-name{font-size:15px;font-weight:700;color:white;margin-bottom:4px;}
-        .sidebar-reg{font-size:12px;color:#94a3b8;margin-bottom:12px;}
+        .sidebar-reg{font-size:12px;color:#94a3b8;margin-bottom:12px;font-family:ui-monospace,SFMono-Regular,Consolas,Menlo,monospace;}
         .sidebar-badges{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;}
-        .rank-pill{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;}
-        .rank-dept{background:#1e3a5f;color:#60a5fa;}
-        .rank-college{background:#1a2e1a;color:#4ade80;}
+        .rank-pill{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;font-family:ui-monospace,SFMono-Regular,Consolas,Menlo,monospace;}
+        .rank-dept{background:#1e3a5f;color:#7ba4ff;}
+        .rank-college{background:#123524;color:#4ade80;}
 
-        .nav-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:8px;cursor:pointer;color:#94a3b8;font-size:13px;font-weight:600;transition:0.2s;border:none;background:none;width:100%;text-align:left;}
+        .nav-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:8px;cursor:pointer;color:#94a3b8;font-size:13px;font-weight:600;transition:0.15s;border:none;background:none;width:100%;text-align:left;}
         .nav-item:hover{background:#1e293b;color:white;}
-        .nav-item.active{background:#2563eb;color:white;}
-        .nav-item .icon{font-size:16px;width:20px;text-align:center;}
+        .nav-item.active{background:#2454d6;color:white;}
+        .nav-item .icon{color:currentColor;opacity:.9;}
 
         .sidebar-info{margin-top:auto;padding-top:16px;border-top:1px solid #1e293b;}
         .info-row{display:flex;justify-content:space-between;font-size:12px;padding:4px 6px;}
@@ -51,94 +56,98 @@
 
         /* SUMMARY CARDS */
         .summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:22px;}
-        .summary-card{background:white;border-radius:12px;padding:18px 16px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,0.06);}
-        .summary-card h3{font-size:12px;color:#64748b;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.4px;}
-        .summary-card .val{font-size:26px;font-weight:800;color:#2563eb;}
-        .summary-card.rank-card .val{color:#f59e0b;}
-        .summary-card.rank-card.college .val{color:#16a34a;}
+        .summary-card{background:#ffffff;border:1px solid #e2e7f1;border-radius:14px;padding:18px 16px;text-align:center;box-shadow:0 1px 2px rgba(11,18,32,.05);}
+        .summary-card h3{font-size:11px;color:#66708a;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px;font-weight:700;}
+        .summary-card .val{font-size:26px;font-weight:800;color:#2454d6;font-family:ui-monospace,SFMono-Regular,Consolas,Menlo,monospace;}
+        .summary-card.rank-card .val{color:#a9791b;}
+        .summary-card.rank-card.college .val{color:#0f8a5f;}
 
         /* SECTION TITLE */
-        .section-title{font-size:15px;font-weight:700;color:#0f172a;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+        .section-title{font-size:15px;font-weight:700;color:#0b1220;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+        .section-title .icon{width:16px;height:16px;color:#2454d6;}
 
         /* PLATFORM CARDS */
         .platform-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:22px;}
-        .platform-card{background:white;border-radius:12px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,0.06);position:relative;overflow:hidden;}
+        .platform-card{background:#ffffff;border:1px solid #e2e7f1;border-radius:14px;padding:20px;box-shadow:0 1px 2px rgba(11,18,32,.05);position:relative;overflow:hidden;}
         .platform-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
-        .platform-card.lc::before{background:#f59e0b;}
-        .platform-card.cc::before{background:#7c3aed;}
-        .platform-card.cf::before{background:#2563eb;}
-        .platform-card.gh::before{background:#0f172a;}
+        .platform-card.lc::before{background:#c9821c;}
+        .platform-card.cc::before{background:#6b4a35;}
+        .platform-card.cf::before{background:#1f6fa8;}
+        .platform-card.gh::before{background:#0b1220;}
         .platform-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
-        .platform-name{font-size:14px;font-weight:700;color:#0f172a;}
-        .platform-username{font-size:11px;color:#94a3b8;background:#f1f5f9;padding:2px 8px;border-radius:20px;}
+        .platform-name{font-size:14px;font-weight:700;color:#0b1220;display:flex;align-items:center;gap:7px;}
+        .platform-username{font-size:11px;color:#66708a;background:#eef1f7;padding:2px 8px;border-radius:20px;font-family:ui-monospace,SFMono-Regular,Consolas,Menlo,monospace;}
         .platform-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
-        .stat-item{background:#f8fafc;border-radius:8px;padding:8px 10px;}
-        .stat-label{font-size:10px;color:#94a3b8;margin-bottom:2px;}
-        .stat-val{font-size:14px;font-weight:700;color:#0f172a;}
-        .view-btn{width:100%;padding:8px;border:none;border-radius:8px;cursor:pointer;font-size:12px;font-weight:600;transition:0.2s;}
-        .lc .view-btn{background:#fef3c7;color:#92400e;} .lc .view-btn:hover{background:#fde68a;}
-        .cc .view-btn{background:#ede9fe;color:#5b21b6;} .cc .view-btn:hover{background:#ddd6fe;}
-        .cf .view-btn{background:#dbeafe;color:#1e40af;} .cf .view-btn:hover{background:#bfdbfe;}
-        .gh .view-btn{background:#f1f5f9;color:#0f172a;} .gh .view-btn:hover{background:#e2e8f0;}
+        .stat-item{background:#f6f8fc;border:1px solid #edf0f6;border-radius:8px;padding:8px 10px;}
+        .stat-label{font-size:10px;color:#66708a;margin-bottom:2px;font-weight:600;text-transform:uppercase;letter-spacing:.3px;}
+        .stat-val{font-size:14px;font-weight:700;color:#0b1220;font-family:ui-monospace,SFMono-Regular,Consolas,Menlo,monospace;}
+        .view-btn{width:100%;padding:9px;border:none;border-radius:8px;cursor:pointer;font-size:12px;font-weight:600;transition:0.15s;display:flex;align-items:center;justify-content:center;gap:6px;}
+        .lc .view-btn{background:#faf1de;color:#96620d;} .lc .view-btn:hover{background:#f5e4bd;}
+        .cc .view-btn{background:#f2e9e3;color:#553a2a;} .cc .view-btn:hover{background:#e8dacf;}
+        .cf .view-btn{background:#e6f1f9;color:#173a9e;} .cf .view-btn:hover{background:#d3e6f4;}
+        .gh .view-btn{background:#eef1f7;color:#0b1220;} .gh .view-btn:hover{background:#e2e7f1;}
         .not-set{font-size:12px;color:#94a3b8;font-style:italic;}
 
         /* GITHUB CARD — full width */
-        .github-card{background:white;border-radius:12px;padding:22px;box-shadow:0 1px 4px rgba(0,0,0,0.06);margin-bottom:22px;border-top:3px solid #0f172a;}
+        .github-card{background:#ffffff;border-radius:14px;padding:22px;box-shadow:0 1px 2px rgba(11,18,32,.05);margin-bottom:22px;border:1px solid #e2e7f1;border-top:3px solid #0b1220;}
         .gh-header{display:flex;align-items:center;gap:16px;margin-bottom:18px;}
-        .gh-avatar{width:60px;height:60px;border-radius:50%;border:2px solid #e2e8f0;}
-        .gh-meta h3{font-size:16px;font-weight:700;color:#0f172a;margin-bottom:2px;}
-        .gh-meta p{font-size:12px;color:#64748b;}
+        .gh-avatar{width:60px;height:60px;border-radius:50%;border:2px solid #e2e7f1;}
+        .gh-meta h3{font-size:16px;font-weight:700;color:#0b1220;margin-bottom:2px;}
+        .gh-meta p{font-size:12px;color:#66708a;}
         .gh-stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px;}
-        .gh-stat{background:#f8fafc;border-radius:10px;padding:12px;text-align:center;}
-        .gh-stat .num{font-size:22px;font-weight:800;color:#0f172a;}
-        .gh-stat .lbl{font-size:11px;color:#94a3b8;margin-top:2px;}
+        .gh-stat{background:#f6f8fc;border:1px solid #edf0f6;border-radius:10px;padding:12px;text-align:center;}
+        .gh-stat .num{font-size:22px;font-weight:800;color:#0b1220;font-family:ui-monospace,SFMono-Regular,Consolas,Menlo,monospace;}
+        .gh-stat .lbl{font-size:11px;color:#66708a;margin-top:2px;}
         .gh-details{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:14px;}
         .gh-detail-item{display:flex;align-items:center;gap:6px;font-size:12px;color:#64748b;}
-        .lang-badge{display:inline-block;background:#0f172a;color:white;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600;}
-        .gh-btn{padding:9px 20px;background:#0f172a;color:white;border:none;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;}
-        .gh-btn:hover{background:#1e293b;}
+        .lang-badge{display:inline-block;background:#0b1220;color:white;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600;}
+        .gh-btn{padding:9px 20px;background:#0b1220;color:white;border:none;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;transition:.15s;}
+        .gh-btn:hover{background:#16213f;}
         .gh-loading{color:#94a3b8;font-size:13px;font-style:italic;}
-        .gh-not-set{background:#f8fafc;border-radius:10px;padding:20px;text-align:center;color:#94a3b8;font-size:13px;}
+        .gh-not-set{background:#f6f8fc;border-radius:10px;padding:20px;text-align:center;color:#94a3b8;font-size:13px;}
 
         /* PROFILE LINKS */
         .links-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:22px;}
-        .link-card{background:white;border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 1px 4px rgba(0,0,0,0.06);cursor:pointer;transition:0.2s;text-decoration:none;}
-        .link-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.1);}
-        .link-icon{font-size:22px;width:36px;text-align:center;}
+        .link-card{background:#ffffff;border:1px solid #e2e7f1;border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 1px 2px rgba(11,18,32,.05);cursor:pointer;transition:0.15s;text-decoration:none;}
+        .link-card:hover{transform:translateY(-2px);box-shadow:0 8px 20px -12px rgba(11,18,32,.25);border-color:#c7d5f9;}
+        .link-icon{width:36px;height:36px;border-radius:9px;background:#e7edfc;color:#2454d6;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+        .link-icon .icon{width:18px;height:18px;}
         .link-info{flex:1;}
-        .link-name{font-size:13px;font-weight:700;color:#0f172a;}
-        .link-val{font-size:11px;color:#94a3b8;margin-top:2px;}
-        .link-arrow{color:#cbd5e1;font-size:16px;}
+        .link-name{font-size:13px;font-weight:700;color:#0b1220;}
+        .link-val{font-size:11px;color:#66708a;margin-top:2px;font-family:ui-monospace,SFMono-Regular,Consolas,Menlo,monospace;}
+        .link-arrow{color:#ccd4e5;}
 
         /* SETTINGS */
-        .settings-card{background:white;border-radius:12px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,0.06);}
-        .settings-card h2{font-size:16px;font-weight:700;color:#0f172a;margin-bottom:18px;}
-        .section-label{font-size:11px;font-weight:700;color:#2563eb;text-transform:uppercase;letter-spacing:0.5px;margin:16px 0 10px;padding-bottom:4px;border-bottom:2px solid #dbeafe;}
+        .settings-card{background:#ffffff;border:1px solid #e2e7f1;border-radius:14px;padding:24px;box-shadow:0 1px 2px rgba(11,18,32,.05);}
+        .settings-card h2{font-size:16px;font-weight:700;color:#0b1220;margin-bottom:18px;display:flex;align-items:center;gap:9px;}
+        .settings-card h2 .icon{width:17px;height:17px;color:#2454d6;}
+        .section-label{font-size:11px;font-weight:700;color:#2454d6;text-transform:uppercase;letter-spacing:0.5px;margin:16px 0 10px;padding-bottom:6px;border-bottom:2px solid #e7edfc;}
         .settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
         .field-group{display:flex;flex-direction:column;gap:4px;}
-        .field-group label{font-size:11px;font-weight:600;color:#374151;}
-        .field-group input{padding:9px 12px;border:1px solid #cbd5e1;border-radius:8px;font-size:13px;outline:none;}
-        .field-group input:focus{border-color:#2563eb;}
-        .save-btn{margin-top:18px;width:100%;padding:12px;background:#2563eb;color:white;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;}
-        .save-btn:hover{background:#1d4ed8;}
+        .field-group label{font-size:11px;font-weight:600;color:#3c4358;}
+        .field-group input{padding:9px 12px;border:1px solid #ccd4e5;border-radius:8px;font-size:13px;outline:none;background:#ffffff;color:#141a2c;transition:.15s;}
+        .field-group input:focus{border-color:#2454d6;box-shadow:0 0 0 3px #e7edfc;}
+        .save-btn{margin-top:18px;width:100%;padding:12px;background:#2454d6;color:white;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;transition:.15s;}
+        .save-btn:hover{background:#173a9e;}
 
         /* FIRST LOGIN MODAL */
-        .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:1000;justify-content:center;align-items:center;}
+        .modal-overlay{display:none;position:fixed;inset:0;background:rgba(11,18,32,0.6);z-index:1000;justify-content:center;align-items:center;padding:20px;backdrop-filter:blur(1.5px);}
         .modal-overlay.active{display:flex;}
-        .modal-box{background:white;border-radius:16px;padding:36px;width:100%;max-width:440px;box-shadow:0 20px 60px rgba(0,0,0,0.3);}
-        .modal-box h2{font-size:20px;color:#0f172a;margin-bottom:4px;}
-        .modal-box .sub{font-size:13px;color:#64748b;margin-bottom:20px;}
+        .modal-box{background:#ffffff;border-radius:16px;padding:36px;width:100%;max-width:440px;box-shadow:0 24px 60px -16px rgba(11,18,32,.4);}
+        .modal-box h2{font-size:20px;color:#0b1220;margin-bottom:4px;font-weight:700;display:flex;align-items:center;gap:9px;}
+        .modal-box h2 .icon{width:19px;height:19px;color:#2454d6;}
+        .modal-box .sub{font-size:13px;color:#66708a;margin-bottom:20px;}
         .modal-box label{display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:4px;}
-        .modal-box input{width:100%;padding:11px 13px;border:1px solid #cbd5e1;border-radius:8px;font-size:13px;margin-bottom:14px;box-sizing:border-box;}
-        .modal-box input:focus{outline:none;border-color:#2563eb;}
-        .modal-save-btn{width:100%;padding:13px;background:#2563eb;color:white;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;}
-        .modal-save-btn:hover{background:#1d4ed8;}
+        .modal-box input{width:100%;padding:11px 13px;border:1px solid #ccd4e5;border-radius:8px;font-size:13px;margin-bottom:14px;box-sizing:border-box;background:#ffffff;color:#141a2c;transition:.15s;}
+        .modal-box input:focus{outline:none;border-color:#2454d6;box-shadow:0 0 0 3px #e7edfc;}
+        .modal-save-btn{width:100%;padding:13px;background:#2454d6;color:white;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;transition:.15s;}
+        .modal-save-btn:hover{background:#173a9e;}
         .modal-skip{display:block;text-align:center;margin-top:12px;font-size:12px;color:#94a3b8;cursor:pointer;}
         .modal-skip:hover{color:#64748b;}
-        .modal-msg{text-align:center;font-size:12px;margin-top:8px;}
+        .modal-msg{text-align:center;font-size:12px;margin-top:8px;color:#66708a;}
 
         /* SPINNER */
-        .spinner{display:inline-block;width:12px;height:12px;border:2px solid rgba(0,0,0,0.1);border-top-color:#2563eb;border-radius:50%;animation:spin 0.7s linear infinite;}
+        .spinner{display:inline-block;width:12px;height:12px;border:2px solid rgba(0,0,0,0.1);border-top-color:#2454d6;border-radius:50%;animation:spin 0.7s linear infinite;}
         @keyframes spin{to{transform:rotate(360deg);}}
 
         @media(max-width:1100px){
@@ -152,49 +161,64 @@
             .platform-grid{grid-template-columns:1fr;}
             .summary-grid{grid-template-columns:repeat(2,1fr);}
             .settings-grid{grid-template-columns:1fr;}
+            .links-grid{grid-template-columns:1fr;}
+            .main{padding:16px;}
         }
+        @media (prefers-reduced-motion: reduce){
+            *{transition-duration:.001ms !important;animation-duration:.001ms !important;}
+        }
+
         /* CONTEST CARDS */
-.contest-card {
-    background: white;
-    border-radius: 10px;
-    padding: 14px 16px;
-    margin-bottom: 10px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-    display: flex;
-    align-items: center;
-    gap: 14px;
-}
-.contest-card.lc        { border-left: 4px solid #f59e0b; }
-.contest-card.cc        { border-left: 4px solid #7c3aed; }
-.contest-card.cf        { border-left: 4px solid #2563eb; }
-.contest-card.past-card { border-left: 4px solid #94a3b8; opacity:0.85; }
-.contest-platform {
-    font-size: 11px; font-weight: 700;
-    padding: 3px 10px; border-radius: 20px;
-    background: #f1f5f9; color: #475569;
-    white-space: nowrap; min-width: 90px; text-align: center;
-}
-.contest-name { font-size: 13px; font-weight: 600; color: #0f172a; }
-.contest-time {
-    font-size: 11px; color: #64748b;
-    margin-top: 3px; line-height: 1.6;
-}
-.contest-link {
-    padding: 7px 14px; border-radius: 6px;
-    font-size: 12px; font-weight: 600;
-    text-decoration: none; white-space: nowrap;
-    color: white; background: #2563eb; margin-left: auto;
-}
-.contest-link:hover { background: #1d4ed8; }
-.contest-link.grey  { background: #64748b; }
-.contest-link.grey:hover { background: #475569; }
+        .contest-card {
+            background: #ffffff;
+            border:1px solid #e2e7f1;
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin-bottom: 10px;
+            box-shadow: 0 1px 2px rgba(11,18,32,.05);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex-wrap:wrap;
+        }
+        .contest-card.lc        { border-left: 4px solid #c9821c; }
+        .contest-card.cc        { border-left: 4px solid #6b4a35; }
+        .contest-card.cf        { border-left: 4px solid #1f6fa8; }
+        .contest-card.past-card { border-left: 4px solid #ccd4e5; opacity:0.85; }
+        .contest-platform {
+            font-size: 11px; font-weight: 700;
+            padding: 3px 10px; border-radius: 20px;
+            background: #eef1f7; color: #66708a;
+            white-space: nowrap; min-width: 90px; text-align: center;
+        }
+        .contest-card.lc .contest-platform{background:#faf1de;color:#c9821c;}
+        .contest-card.cc .contest-platform{background:#f2e9e3;color:#6b4a35;}
+        .contest-card.cf .contest-platform{background:#e6f1f9;color:#1f6fa8;}
+        .contest-name { font-size: 13px; font-weight: 600; color: #0b1220; }
+        .contest-time {
+            font-size: 11px; color: #66708a;
+            margin-top: 3px; line-height: 1.6;
+            font-family:ui-monospace,SFMono-Regular,Consolas,Menlo,monospace;
+        }
+        .contest-link {
+            padding: 7px 14px; border-radius: 6px;
+            font-size: 12px; font-weight: 600;
+            text-decoration: none; white-space: nowrap;
+            color: white; background: #2454d6; margin-left: auto;
+        }
+        .contest-link:hover { background: #173a9e; }
+        .contest-link.grey  { background: #66708a; }
+        .contest-link.grey:hover { background: #4b5568; }
     </style>
 </head>
 <body>
 
 <!-- NAVBAR -->
 <div class="navbar">
-    <h1>⚡ CodeTrack</h1>
+    <h1>
+        <svg class="icon" viewBox="0 0 24 24"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z"/></svg>
+        CodeTrack
+    </h1>
     <div class="nav-right">
         <div class="nav-info">
             <strong id="navName">Student</strong>
@@ -207,7 +231,10 @@
 <!-- FIRST LOGIN MODAL -->
 <div class="modal-overlay" id="firstLoginModal">
     <div class="modal-box">
-        <h2>🎉 Welcome to CodeTrack!</h2>
+        <h2>
+            <svg class="icon" viewBox="0 0 24 24"><path d="M12 2c3 3 4 6 4 9a4 4 0 0 1-8 0c0-3 1-6 4-9Z"/><path d="M9 15l-3 3 1 3 3-1M15 15l3 3-1 3-3-1"/></svg>
+            Welcome to CodeTrack
+        </h2>
         <p class="sub">Add your coding platform usernames to start tracking your progress.</p>
         <label>LeetCode Username</label>
         <input type="text" id="modalLeetcode" placeholder="e.g. john_doe">
@@ -239,22 +266,22 @@
         </div>
 
         <button class="nav-item active" onclick="showTab('overview',this)">
-            <span class="icon">🏠</span> Overview
+            <span class="icon"><svg class="icon" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg></span> Overview
         </button>
         <button class="nav-item" onclick="showTab('coding',this)">
-            <span class="icon">💻</span> Coding Platforms
+            <span class="icon"><svg class="icon" viewBox="0 0 24 24"><path d="m8 9-4 3 4 3M16 9l4 3-4 3M13 5l-2 14"/></svg></span> Coding Platforms
         </button>
         <button class="nav-item" onclick="showTab('contests',this)">
-            <span class="icon">🏆</span> Contests
+            <span class="icon"><svg class="icon" viewBox="0 0 24 24"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0V4Z"/><path d="M7 5H4a3 3 0 0 0 3 5M17 5h3a3 3 0 0 1-3 5"/></svg></span> Contests
         </button>
         <button class="nav-item" onclick="showTab('github',this)">
-            <span class="icon">🐙</span> GitHub
+            <span class="icon"><svg class="icon" viewBox="0 0 24 24"><circle cx="6" cy="6" r="2"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="12" r="2"/><path d="M6 8v8M8 6h4a4 4 0 0 1 4 4"/></svg></span> GitHub
         </button>
         <button class="nav-item" onclick="showTab('links',this)">
-            <span class="icon">🔗</span> My Links
+            <span class="icon"><svg class="icon" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg></span> My Links
         </button>
         <button class="nav-item" onclick="showTab('settings',this)">
-            <span class="icon">⚙️</span> Settings
+            <span class="icon"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.6-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.6V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.6 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.6 1z"/></svg></span> Settings
         </button>
 
         <div class="sidebar-info">
@@ -301,22 +328,28 @@
                     <div class="val" style="font-size:18px" id="bestPlatform">-</div>
                 </div>
                 <div class="summary-card rank-card">
-                    <h3>🏛 Dept Rank</h3>
+                    <h3>Dept Rank</h3>
                     <div class="val" id="deptRank">-</div>
                 </div>
                 <div class="summary-card rank-card college">
-                    <h3>🏅 College Rank</h3>
+                    <h3>College Rank</h3>
                     <div class="val" id="collegeRank">-</div>
                 </div>
             </div>
 
             <!-- Quick platform overview -->
-            <div class="section-title">💻 Platform Overview</div>
+            <div class="section-title">
+                <svg class="icon" viewBox="0 0 24 24"><path d="m8 9-4 3 4 3M16 9l4 3-4 3M13 5l-2 14"/></svg>
+                Platform Overview
+            </div>
             <div class="platform-grid">
 
                 <div class="platform-card lc">
                     <div class="platform-header">
-                        <span class="platform-name">🟡 LeetCode</span>
+                        <span class="platform-name">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z"/></svg>
+                            LeetCode
+                        </span>
                         <span class="platform-username" id="ovLcUser">-</span>
                     </div>
                     <div class="platform-stats">
@@ -325,12 +358,18 @@
                         <div class="stat-item"><div class="stat-label">Contests</div><div class="stat-val" id="ovLcContests">-</div></div>
                         <div class="stat-item"><div class="stat-label">Global Rank</div><div class="stat-val" id="ovLcRank">-</div></div>
                     </div>
-                    <button class="view-btn" onclick="openProfile('leetcode')">View Profile →</button>
+                    <button class="view-btn" onclick="openProfile('leetcode')">
+                        View Profile
+                        <svg class="icon" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                    </button>
                 </div>
 
                 <div class="platform-card cc">
                     <div class="platform-header">
-                        <span class="platform-name">⭐ CodeChef</span>
+                        <span class="platform-name">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M12 2 2 7l10 5 10-5-10-5Z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                            CodeChef
+                        </span>
                         <span class="platform-username" id="ovCcUser">-</span>
                     </div>
                     <div class="platform-stats">
@@ -339,12 +378,18 @@
                         <div class="stat-item"><div class="stat-label">Contests</div><div class="stat-val" id="ovCcContests">-</div></div>
                         <div class="stat-item"><div class="stat-label">Global Rank</div><div class="stat-val" id="ovCcRank">-</div></div>
                     </div>
-                    <button class="view-btn" onclick="openProfile('codechef')">View Profile →</button>
+                    <button class="view-btn" onclick="openProfile('codechef')">
+                        View Profile
+                        <svg class="icon" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                    </button>
                 </div>
 
                 <div class="platform-card cf">
                     <div class="platform-header">
-                        <span class="platform-name">🔵 Codeforces</span>
+                        <span class="platform-name">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0V4Z"/><path d="M7 5H4a3 3 0 0 0 3 5M17 5h3a3 3 0 0 1-3 5"/></svg>
+                            Codeforces
+                        </span>
                         <span class="platform-username" id="ovCfUser">-</span>
                     </div>
                     <div class="platform-stats">
@@ -353,34 +398,52 @@
                         <div class="stat-item"><div class="stat-label">Contests</div><div class="stat-val" id="ovCfContests">-</div></div>
                         <div class="stat-item"><div class="stat-label">Solved</div><div class="stat-val" id="ovCfSolved">-</div></div>
                     </div>
-                    <button class="view-btn" onclick="openProfile('codeforces')">View Profile →</button>
+                    <button class="view-btn" onclick="openProfile('codeforces')">
+                        View Profile
+                        <svg class="icon" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                    </button>
                 </div>
             </div>
 
             <!-- GitHub quick card -->
-            <div class="section-title">🐙 GitHub Overview</div>
+            <div class="section-title">
+                <svg class="icon" viewBox="0 0 24 24"><circle cx="6" cy="6" r="2"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="12" r="2"/><path d="M6 8v8M8 6h4a4 4 0 0 1 4 4"/></svg>
+                GitHub Overview
+            </div>
             <div id="ghQuickCard"></div>
 
         </div>
 
         <!-- ═══ TAB: CODING PLATFORMS ═══ -->
         <div class="tab-section" id="tab-contests">
-            <div class="section-title">🏆 Upcoming Contests</div>
+            <div class="section-title">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0V4Z"/><path d="M7 5H4a3 3 0 0 0 3 5M17 5h3a3 3 0 0 1-3 5"/></svg>
+                Upcoming Contests
+            </div>
             <div id="upcomingContests" style="margin-bottom:24px">
                 <div style="color:#94a3b8;font-size:13px">Loading...</div>
             </div>
-            <div class="section-title">📋 Recent Contests</div>
+            <div class="section-title">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
+                Recent Contests
+            </div>
             <div id="pastContests">
                 <div style="color:#94a3b8;font-size:13px">Loading...</div>
             </div>
         </div>
         <div class="tab-section" id="tab-coding">
-            <div class="section-title">💻 Coding Platform Stats</div>
+            <div class="section-title">
+                <svg class="icon" viewBox="0 0 24 24"><path d="m8 9-4 3 4 3M16 9l4 3-4 3M13 5l-2 14"/></svg>
+                Coding Platform Stats
+            </div>
 
             <!-- LEETCODE DETAIL -->
             <div class="platform-card lc" style="margin-bottom:16px">
                 <div class="platform-header">
-                    <span class="platform-name" style="font-size:16px">🟡 LeetCode</span>
+                    <span class="platform-name" style="font-size:16px">
+                        <svg class="icon" viewBox="0 0 24 24"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z"/></svg>
+                        LeetCode
+                    </span>
                     <span class="platform-username" id="lcUser">Not Set</span>
                 </div>
                 <div class="platform-stats" style="grid-template-columns:repeat(4,1fr)">
@@ -393,12 +456,15 @@
                     <div class="stat-item"><div class="stat-label">Global Rank</div><div class="stat-val" id="lcRank">-</div></div>
                     <div class="stat-item"><div class="stat-label">Contests</div><div class="stat-val" id="lcContest">-</div></div>
                     <div class="stat-item" style="grid-column:span 4">
-                        <div class="stat-label">🕐 Platform Rating Updated On</div>
+                        <div class="stat-label">Platform Rating Updated On</div>
                         <div class="stat-val" id="lcLastUpdated" style="font-size:12px">-</div>
                     </div>
                 </div>
                 <div style="display:flex;gap:8px;margin-top:4px">
-                    <button class="view-btn lc" onclick="openProfile('leetcode')" style="flex:1">View LeetCode Profile →</button>
+                    <button class="view-btn lc" onclick="openProfile('leetcode')" style="flex:1">
+                        View LeetCode Profile
+                        <svg class="icon" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                    </button>
                 </div>
 
             </div>
@@ -406,7 +472,10 @@
             <!-- CODECHEF DETAIL -->
             <div class="platform-card cc" style="margin-bottom:16px">
                 <div class="platform-header">
-                    <span class="platform-name" style="font-size:16px">⭐ CodeChef</span>
+                    <span class="platform-name" style="font-size:16px">
+                        <svg class="icon" viewBox="0 0 24 24"><path d="M12 2 2 7l10 5 10-5-10-5Z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                        CodeChef
+                    </span>
                     <span class="platform-username" id="ccUser">Not Set</span>
                 </div>
                 <div class="platform-stats" style="grid-template-columns:repeat(4,1fr)">
@@ -419,17 +488,23 @@
                     <div class="stat-item"><div class="stat-label">Contests</div><div class="stat-val" id="ccContest">-</div></div>
                     <div class="stat-item"><div class="stat-label">Problems</div><div class="stat-val" id="ccSolved">-</div></div>
                     <div class="stat-item" style="grid-column:span 4">
-                        <div class="stat-label">🕐 Platform Rating Updated On</div>
+                        <div class="stat-label">Platform Rating Updated On</div>
                         <div class="stat-val" id="ccLastUpdated" style="font-size:12px">-</div>
                     </div>
                 </div>
-                <button class="view-btn cc" onclick="openProfile('codechef')" style="margin-top:4px">View CodeChef Profile →</button>
+                <button class="view-btn cc" onclick="openProfile('codechef')" style="margin-top:4px">
+                    View CodeChef Profile
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                </button>
             </div>
 
             <!-- CODEFORCES DETAIL -->
             <div class="platform-card cf" style="margin-bottom:16px">
                 <div class="platform-header">
-                    <span class="platform-name" style="font-size:16px">🔵 Codeforces</span>
+                    <span class="platform-name" style="font-size:16px">
+                        <svg class="icon" viewBox="0 0 24 24"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0V4Z"/><path d="M7 5H4a3 3 0 0 0 3 5M17 5h3a3 3 0 0 1-3 5"/></svg>
+                        Codeforces
+                    </span>
                     <span class="platform-username" id="cfUser">Not Set</span>
                 </div>
                 <div class="platform-stats" style="grid-template-columns:repeat(4,1fr)">
@@ -442,30 +517,42 @@
                     <div class="stat-item"><div class="stat-label">Level</div><div class="stat-val" id="cfLevel">-</div></div>
                     <div class="stat-item"><div class="stat-label">Last Active</div><div class="stat-val" id="cfActive">-</div></div>
                     <div class="stat-item" style="grid-column:span 4">
-                        <div class="stat-label">🕐 Platform Rating Updated On</div>
+                        <div class="stat-label">Platform Rating Updated On</div>
                         <div class="stat-val" id="cfLastUpdated" style="font-size:12px">-</div>
                     </div>
                 </div>
-                <button class="view-btn cf" onclick="openProfile('codeforces')" style="margin-top:4px">View Codeforces Profile →</button>
+                <button class="view-btn cf" onclick="openProfile('codeforces')" style="margin-top:4px">
+                    View Codeforces Profile
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                </button>
             </div>
         </div>
 
         <!-- ═══ TAB: GITHUB ═══ -->
         <div class="tab-section" id="tab-github">
-            <div class="section-title">🐙 GitHub Profile</div>
+            <div class="section-title">
+                <svg class="icon" viewBox="0 0 24 24"><circle cx="6" cy="6" r="2"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="12" r="2"/><path d="M6 8v8M8 6h4a4 4 0 0 1 4 4"/></svg>
+                GitHub Profile
+            </div>
             <div id="githubFullCard"></div>
         </div>
 
         <!-- ═══ TAB: LINKS ═══ -->
         <div class="tab-section" id="tab-links">
-            <div class="section-title">🔗 My Profiles & Links</div>
+            <div class="section-title">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>
+                My Profiles &amp; Links
+            </div>
             <div class="links-grid" id="linksGrid"></div>
         </div>
 
         <!-- ═══ TAB: SETTINGS ═══ -->
         <div class="tab-section" id="tab-settings">
             <div class="settings-card">
-                <h2>⚙️ Update Profile</h2>
+                <h2>
+                    <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.6-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.6V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.6 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.6 1z"/></svg>
+                Update Profile
+                </h2>
 
                 <div class="section-label">Basic Information</div>
                 <div class="settings-grid">
@@ -484,7 +571,7 @@
                     <div class="field-group"><label>GeeksforGeeks Username</label><input type="text" id="updateGFG"></div>
                 </div>
 
-                <div class="section-label">GitHub & Links</div>
+                <div class="section-label">GitHub &amp; Links</div>
                 <div class="settings-grid">
                     <div class="field-group"><label>GitHub Username *</label><input type="text" id="updateGithub" placeholder="Required"></div>
                     <div class="field-group"><label>LinkedIn URL</label><input type="text" id="updateLinkedin"></div>
