@@ -1,9 +1,9 @@
 body {
     margin: 0;
     padding: 20px;
-    font-family: Arial, sans-serif;
-    background: #f4f7fb;
-    color: #233142;
+    font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;
+    background: #eef1f7;
+    color: #141a2c;
 }
 
 .dashboard-container {
@@ -18,11 +18,12 @@ body {
 }
 
 .profile-card {
-    background: white;
+    background: #ffffff;
+    border: 1px solid #e2e7f1;
     border-radius: 16px;
     padding: 25px;
     text-align: center;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    box-shadow: 0 1px 2px rgba(11,18,32,.05);
 
     position: sticky;
     top: 20px;
@@ -40,7 +41,8 @@ body {
 }
 
 .info-box {
-    background: #f7f9fc;
+    background: #f6f8fc;
+    border: 1px solid #edf0f6;
     padding: 12px;
     border-radius: 10px;
     margin-bottom: 10px;
@@ -62,23 +64,27 @@ body {
 }
 
 .summary-card {
-    background: white;
+    background: #ffffff;
+    border: 1px solid #e2e7f1;
     padding: 20px;
     border-radius: 14px;
     text-align: center;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    box-shadow: 0 1px 2px rgba(11,18,32,.05);
 }
 
 .summary-card h3 {
     margin: 0;
-    color: #4b6584;
+    color: #66708a;
+    font-size: 13px;
+    font-weight: 700;
 }
 
 .summary-card p {
+    font-family: ui-monospace,SFMono-Regular,Consolas,Menlo,monospace;
     font-size: 28px;
     font-weight: bold;
     margin-top: 15px;
-    color: #0f4c81;
+    color: #2454d6;
 }
 
 /* ---------------- PLATFORM ---------------- */
@@ -90,35 +96,41 @@ body {
 }
 
 .platform-card {
-    background: white;
+    background: #ffffff;
+    border: 1px solid #e2e7f1;
     padding: 22px;
     border-radius: 14px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    box-shadow: 0 1px 2px rgba(11,18,32,.05);
 }
 
 .platform-card h2 {
     margin-top: 0;
-    color: #1d3557;
+    font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;
+    font-size: 16px;
+    color: #0b1220;
 }
 
 .platform-card p {
     margin: 12px 0;
+    color: #141a2c;
 }
 
 .platform-card button {
     width: 100%;
     border: none;
-    background: #0f4c81;
+    background: #2454d6;
     color: white;
     padding: 12px;
     border-radius: 10px;
     cursor: pointer;
     margin-top: 15px;
     font-size: 15px;
+    font-weight: 600;
+    transition: .15s;
 }
 
 .platform-card button:hover {
-    background: #0b3c66;
+    background: #173a9e;
 }
 
 /* ---------------- RESPONSIVE ---------------- */
@@ -152,17 +164,19 @@ body {
 }
 
 .settings-btn{
-    background:#0f4c81;
+    background:#2454d6;
     color:white;
     border:none;
     padding:12px 18px;
     border-radius:10px;
     cursor:pointer;
     font-size:15px;
+    font-weight:600;
+    transition:.15s;
 }
 
 .settings-btn:hover{
-    background:#0c3c67;
+    background:#173a9e;
 }
 
 /* ---------------- SETTINGS PANEL ---------------- */
@@ -171,7 +185,9 @@ body {
 
     display:none;
 
-    background:white;
+    background:#ffffff;
+
+    border:1px solid #e2e7f1;
 
     margin-bottom:25px;
 
@@ -179,12 +195,14 @@ body {
 
     border-radius:16px;
 
-    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+    box-shadow:0 1px 2px rgba(11,18,32,.05);
 }
 
 .settings-panel h2{
     margin-top:0;
     margin-bottom:20px;
+    font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;
+    color: #0b1220;
 }
 
 .settings-grid{
@@ -202,9 +220,21 @@ body {
 
     border-radius:10px;
 
-    border:1px solid #ccc;
+    border:1px solid #ccd4e5;
 
     font-size:14px;
+
+    background:#ffffff;
+
+    color:#141a2c;
+
+    transition:.15s;
+}
+
+.settings-grid input:focus{
+    outline:none;
+    border-color:#2454d6;
+    box-shadow:0 0 0 3px #e7edfc;
 }
 
 .save-settings-btn{
@@ -213,7 +243,7 @@ body {
 
     width:100%;
 
-    background:#198754;
+    background:#0f8a5f;
 
     color:white;
 
@@ -226,15 +256,19 @@ body {
     cursor:pointer;
 
     font-size:16px;
+
+    font-weight:600;
+
+    transition:.15s;
 }
 
 .save-settings-btn:hover{
-    background:#157347;
+    background:#0b6d4a;
 }
 /* ---------------- NAVBAR ---------------- */
 
 .navbar {
-    background: #0f172a;
+    background: linear-gradient(180deg,#0b1220 0%,#16213f 100%);
     color: white;
     padding: 0 30px;
     height: 60px;
@@ -242,11 +276,14 @@ body {
     align-items: center;
     justify-content: space-between;
     margin: -20px -20px 20px -20px;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.06), 0 6px 18px -10px rgba(0,0,0,.5);
 }
 
 .navbar h1 {
     font-size: 20px;
-    color: #60a5fa;
+    color: #ffffff;
+    font-weight: 700;
+    font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;
 }
 
 .navbar-right {
@@ -263,49 +300,54 @@ body {
 
 .navbar-info span {
     font-size: 13px;
-    color: #94a3b8;
+    color: #a9b3c9;
 }
 
 .navbar-info strong {
     font-size: 14px;
     color: white;
+    font-weight: 600;
 }
 
 .logout-btn {
     padding: 8px 16px;
-    background: #ef4444;
-    color: white;
-    border: none;
+    background: rgba(209,68,58,0.16);
+    color: #ff9d94;
+    border: 1px solid rgba(209,68,58,0.35);
     border-radius: 6px;
     cursor: pointer;
     font-size: 13px;
     font-weight: 600;
+    transition: .15s;
 }
 
 .logout-btn:hover {
-    background: #dc2626;
+    background: #d1443a;
+    border-color: #d1443a;
+    color: white;
 }
 .contest-card {
-    background: white;
+    background: #ffffff;
+    border: 1px solid #e2e7f1;
     border-radius: 10px;
     padding: 14px 16px;
     margin-bottom: 10px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    box-shadow: 0 1px 2px rgba(11,18,32,.05);
     display: flex;
     align-items: center;
     gap: 14px;
-    border-left: 4px solid #2563eb;
+    border-left: 4px solid #2454d6;
 }
-.contest-card.lc { border-left-color: #f59e0b; }
-.contest-card.cc { border-left-color: #7c3aed; }
-.contest-card.cf { border-left-color: #2563eb; }
-.contest-card.past { border-left-color: #94a3b8; opacity: 0.8; }
+.contest-card.lc { border-left-color: #c9821c; }
+.contest-card.cc { border-left-color: #6b4a35; }
+.contest-card.cf { border-left-color: #1f6fa8; }
+.contest-card.past { border-left-color: #ccd4e5; opacity: 0.8; }
 .contest-platform {
     font-size: 11px; font-weight: 700;
     padding: 2px 8px; border-radius: 20px;
-    background: #f1f5f9; color: #475569;
+    background: #eef1f7; color: #66708a;
     white-space: nowrap;
 }
-.contest-name { font-size: 13px; font-weight: 600; color: #0f172a; }
-.contest-time { font-size: 11px; color: #64748b; margin-top: 2px; }
+.contest-name { font-size: 13px; font-weight: 600; color: #0b1220; }
+.contest-time { font-size: 11px; color: #66708a; margin-top: 2px; font-family: ui-monospace,SFMono-Regular,Consolas,Menlo,monospace; }
 .contest-duration { font-size: 11px; color: #94a3b8; margin-left: auto; white-space: nowrap; }
