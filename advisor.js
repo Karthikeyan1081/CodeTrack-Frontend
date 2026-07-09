@@ -37,7 +37,15 @@ function loadStudents() {
     const endpoint = role === "ADMIN" ? API + "/all" : API + "/department/" + encodeURIComponent(dept);
     fetch(endpoint, { headers: authHeaders() })
     .then(res => { if (res.status === 401 || res.status === 403) { window.location.href = "/index.html"; return; } return res.json(); })
-    .then(data => { if (!data) return; studentsData = data; renderTable(data); updateSummary(data); });
+    .then(data => { 
+    if (!data) return; 
+    studentsData = data.sort((a, b) => 
+        (a.registerNumber || "").localeCompare(b.registerNumber || "")
+    ); 
+    renderTable(studentsData); 
+    updateSummary(studentsData); 
+    updateLastUpdatedStrip(studentsData); 
+});
 }
 
 function renderTable(data) {
